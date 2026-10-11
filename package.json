@@ -1,6 +1,6 @@
 {
   "name": "lumina-reader",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Lumina Reader - Modern, fast eBook and document reader with native Fluent aesthetics",
   "main": "index.js",
   "directories": {
