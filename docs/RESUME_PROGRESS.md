@@ -1,11 +1,11 @@
-# Aquile Reader for Ubuntu — Resumption and Progress Handover
+# Lumina Reader for Ubuntu — Resumption and Progress Handover
 
 | Field | Value |
 | --- | --- |
 | Date | 2026-10-03 |
 | State | Paused at user request (usage limit conservation) |
 | Current Milestone | Phase 3 (WP-10 & WP-11) — M1, M2, M3, M4 completed; M5 ready to execute |
-| GitHub Repository | [https://github.com/ParasRana1729/Aquile-Reader](https://github.com/ParasRana1729/Aquile-Reader) (Branch: `main`) |
+| GitHub Repository | [https://github.com/ParasRana1729/Lumina-Reader](https://github.com/ParasRana1729/Lumina-Reader) (Branch: `main`) |
 | Test Suite Status | **92 passed**, 0 failed, 2 skipped (94 total tests) |
 
 ---
@@ -20,10 +20,10 @@
 
 ### Phase 3: WP-10 & WP-11 Feature Slice Status
 - **`M-TEST` (E2E Test Architecture):** Published [`TEST_INFRA.md`](../TEST_INFRA.md) and [`TEST_READY.md`](../TEST_READY.md); authored 25 four-tier tests in [`tests/test_e2e_wp10_wp11.py`](../tests/test_e2e_wp10_wp11.py).
-- **`M1` (Storage & Domain Models):** Schema v2 migration implemented in SQLite WAL; added `ReadingSession`, `BookStatistics`, and `LibraryStatistics` dataclasses in `src/aquile/domain/models.py`; implemented `StatisticsRepository` in `src/aquile/storage/repository.py`; passed all 7 unit tests in `tests/test_statistics_storage.py` and 10/10 adversarial stress vectors in `scripts/stress_m1_harness.py`.
-- **`M2` (Comic Book Archive Reader):** Implemented `ComicArchiveEngine` (`src/aquile/reader/comic_reader.py`) and `ComicReaderView` (`src/aquile/ui/comic_view.py`) supporting `.cbz` and `.cbr`, natural alphanumeric sorting, single-page and double-page spread pairing (isolated cover), Western LTR and Manga RTL modes, and aspect-ratio containment. Passed 22/22 tests in `tests/test_comic_reader.py`.
-- **`M3` (PDF Document Reader):** Implemented `PdfDocumentEngine` (`src/aquile/reader/pdf_reader.py`) and `PdfReaderView` (`src/aquile/ui/pdf_view.py`) with in-memory Poppler/Cairo vector rendering, fit-to-width/fit-to-page zoom, page navigation, and CLI fallback. Passed 11/11 tests in `tests/test_pdf_reader.py`.
-- **`M4` (Reading Statistics & Insights):** Implemented `ReadingSessionTracker` (`src/aquile/reader/session_tracker.py`) and Libadwaita `StatisticsDialog` (`src/aquile/ui/statistics_dialog.py`) with Library Overview and Book Insights tabs. Passed 16/16 tests in `tests/test_reading_statistics.py`.
+- **`M1` (Storage & Domain Models):** Schema v2 migration implemented in SQLite WAL; added `ReadingSession`, `BookStatistics`, and `LibraryStatistics` dataclasses in `src/lumina/domain/models.py`; implemented `StatisticsRepository` in `src/lumina/storage/repository.py`; passed all 7 unit tests in `tests/test_statistics_storage.py` and 10/10 adversarial stress vectors in `scripts/stress_m1_harness.py`.
+- **`M2` (Comic Book Archive Reader):** Implemented `ComicArchiveEngine` (`src/lumina/reader/comic_reader.py`) and `ComicReaderView` (`src/lumina/ui/comic_view.py`) supporting `.cbz` and `.cbr`, natural alphanumeric sorting, single-page and double-page spread pairing (isolated cover), Western LTR and Manga RTL modes, and aspect-ratio containment. Passed 22/22 tests in `tests/test_comic_reader.py`.
+- **`M3` (PDF Document Reader):** Implemented `PdfDocumentEngine` (`src/lumina/reader/pdf_reader.py`) and `PdfReaderView` (`src/lumina/ui/pdf_view.py`) with in-memory Poppler/Cairo vector rendering, fit-to-width/fit-to-page zoom, page navigation, and CLI fallback. Passed 11/11 tests in `tests/test_pdf_reader.py`.
+- **`M4` (Reading Statistics & Insights):** Implemented `ReadingSessionTracker` (`src/lumina/reader/session_tracker.py`) and Libadwaita `StatisticsDialog` (`src/lumina/ui/statistics_dialog.py`) with Library Overview and Book Insights tabs. Passed 16/16 tests in `tests/test_reading_statistics.py`.
 
 ---
 
@@ -50,12 +50,12 @@ python3 spikes/parity_spike/run_spike.py
 When resuming in the next session:
 
 1. **Complete Milestone M5 (Application Integration & Shell Routing):**
-   - Update `src/aquile/app.py` in `open_book(self, book: Book)`:
+   - Update `src/lumina/app.py` in `open_book(self, book: Book)`:
      - Route `.epub` to `ReaderView`
      - Route `.cbz`, `.cbr` to `ComicReaderView`
      - Route `.pdf` to `PdfReaderView`
      - Wire `ReadingSessionTracker` into active readers to automatically record sessions on page turns and orderly close.
-   - Update `src/aquile/ui/library_view.py`:
+   - Update `src/lumina/ui/library_view.py`:
      - Connect the "Statistics" entry point button to open `StatisticsDialog`.
      - Support opening `.pdf`, `.cbz`, and `.cbr` directly from the library list.
 

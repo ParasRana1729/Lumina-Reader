@@ -74,7 +74,7 @@ const FALLBACK_BOOKS: BookWithProgress[] = [
   {
     id: 'book-quick-start',
     title: 'Quick Start Guide',
-    author: 'Aquile Reader',
+    author: 'Lumina Reader',
     filePath: 'builtin://quick-start-guide.epub',
     format: 'epub',
     coverImage: null,

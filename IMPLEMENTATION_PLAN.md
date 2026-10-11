@@ -1,4 +1,4 @@
-# Implementation Plan: Aquile Reader for Ubuntu
+# Implementation Plan: Lumina Reader for Ubuntu
 
 | Field | Value |
 | --- | --- |
@@ -316,13 +316,13 @@ This initial index does not replace the detailed two-way matrix. Add every newly
 
 **WP-04 & G1 status (2026-10-03):** Cleared. Executed 5/5 parity spikes in `spikes/parity_spike/run_spike.py` demonstrating feasibility. G1 ratified in [docs/decisions/G1_RATIFICATION.md](docs/decisions/G1_RATIFICATION.md) and stack selected in [ADR-0001](docs/decisions/ADR-0001-CLEAN-ROOM-AND-STACK-EVALUATION.md).
 
-**WP-06, WP-07, WP-08, WP-09 & G2 status (2026-10-03):** Cleared. Application package built under `src/aquile/`, CLI runner `run_aquile.py`, desktop integration `data/org.antigravity.AquileReader.desktop`, and 13 unit/integration tests passing. Verified in [docs/validation/G2_PREVIEW_EVIDENCE.md](docs/validation/G2_PREVIEW_EVIDENCE.md).
+**WP-06, WP-07, WP-08, WP-09 & G2 status (2026-10-03):** Cleared. Application package built under `src/lumina/`, CLI runner `run_lumina.py`, desktop integration `data/com.luminareader.desktop`, and 13 unit/integration tests passing. Verified in [docs/validation/G2_PREVIEW_EVIDENCE.md](docs/validation/G2_PREVIEW_EVIDENCE.md).
 
 **Application validation status:** Gate G2 internal reading preview passed; broad release qualification `AT-01`–`AT-13` scheduled for G4 upon completing remaining G3 work packages.
 
 ## 13. Video-grounded parity & polish backlog
 
-Source: user-supplied native Windows capture `windows-aquile-reader-50MB.mp4` (55s, reviewed 2026-10-07; 55 reference
+Source: user-supplied native Windows capture `windows-lumina-reader-50MB.mp4` (55s, reviewed 2026-10-07; 55 reference
 frames extracted at 1fps, 1280px wide). Native facts frozen from the footage: dark theme with transparency ON over a
 blurred wallpaper; Dark Side (`#d41b6c`-family) accent; Segoe UI for all chrome, serif reserved for book content and the
 large italic `23 of 239` page dividers; book under test is *The Prince* EPUB at 239 pages.

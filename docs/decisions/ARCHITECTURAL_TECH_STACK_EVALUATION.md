@@ -1,4 +1,4 @@
-# Architectural & Technology Stack Evaluation: Aquile Reader for Linux
+# Architectural & Technology Stack Evaluation: Lumina Reader for Linux
 
 | Metadata | Value |
 | :--- | :--- |
@@ -13,12 +13,12 @@
 
 ## Executive Summary
 
-Aquile Reader on Windows is celebrated for its **fluid WinUI 3 / Fluent Design System UX**, featuring signature Acrylic translucency and backdrop blur, animated navigation rails, responsive typography, and an immersive two-column reading canvas.
+Lumina Reader on Windows is celebrated for its **fluid WinUI 3 / Fluent Design System UX**, featuring signature Acrylic translucency and backdrop blur, animated navigation rails, responsive typography, and an immersive two-column reading canvas.
 
-An in-depth inspection of the current Linux implementation in `/home/paras/Documents/Projects/Aquile-Reader/` reveals a profound disconnect:
-1. **The Core Reading Experience is Severely Degraded**: While the project passes 319 headless automated tests, the actual EPUB reader (`src/aquile/reader/epub_parser.py` and `src/aquile/ui/reader_view.py`) strips all HTML, CSS, images, and formatting via regular expressions, dividing raw strings by fixed character counts into two stark, unstyled `Gtk.TextView` widgets. It behaves like an unstyled plain text viewer rather than a modern digital book reader.
+An in-depth inspection of the current Linux implementation in `/home/paras/Documents/Projects/Lumina-Reader/` reveals a profound disconnect:
+1. **The Core Reading Experience is Severely Degraded**: While the project passes 319 headless automated tests, the actual EPUB reader (`src/lumina/reader/epub_parser.py` and `src/lumina/ui/reader_view.py`) strips all HTML, CSS, images, and formatting via regular expressions, dividing raw strings by fixed character counts into two stark, unstyled `Gtk.TextView` widgets. It behaves like an unstyled plain text viewer rather than a modern digital book reader.
 2. **Visual & Architectural Dissonance**: The application is caught between two incompatible design philosophies: GNOME's Libadwaita Human Interface Guidelines (CSD headerbars, boxed action rows, `Adw.PreferencesWindow`) and Windows 11 Fluent Design (acrylic surfaces, navigation rail, compact flyouts, dark glassmorphism). The result is a fractured UI with stacked redundant headers, modal popups where embedded panels should exist, and flat pseudo-acrylic approximations that fail the visual parity criteria established in `PRD.md` (§5.3, `VP-01`–`VP-05`).
-3. **The Path Forward**: To achieve true visual and behavioral parity ("Aquile Reader on Ubuntu" — not an amateur reader vaguely inspired by it), this evaluation analyzes four distinct engineering routes. We provide actionable blueprints for both an in-place modernization of the Python/GTK4 stack (via WebKitGTK 6.0 and Readium/Foliate-js) and a greenfield native architecture (via Tauri 2.0 + Rust + Fluent UI Web or .NET Avalonia UI).
+3. **The Path Forward**: To achieve true visual and behavioral parity ("Lumina Reader on Ubuntu" — not an amateur reader vaguely inspired by it), this evaluation analyzes four distinct engineering routes. We provide actionable blueprints for both an in-place modernization of the Python/GTK4 stack (via WebKitGTK 6.0 and Readium/Foliate-js) and a greenfield native architecture (via Tauri 2.0 + Rust + Fluent UI Web or .NET Avalonia UI).
 
 ---
 
@@ -29,12 +29,12 @@ An in-depth inspection of the current Linux implementation in `/home/paras/Docum
 The current Linux application is structured across four primary layers:
 - **Runtime & Language**: Python 3.12+ with PyGObject (`gi.repository.Gtk`, `gi.repository.Adw`, `gi.repository.Gio`, `gi.repository.Gdk`).
 - **Data & Persistence**: SQLite 3 with Write-Ahead Logging (`PRAGMA journal_mode = WAL; synchronous = NORMAL; foreign_keys = ON;`) accessed via the Repository pattern (`BookRepository`, `ReadingProgressRepository`, `AnnotationRepository`, `SettingsRepository`, `StatisticsRepository`). Schema version v4.
-- **Application Shell**: An `Adw.ApplicationWindow` containing a top content `AquileTitleBar` and an `AquileShell` widget consisting of a 56px left dark icon rail (`aquile-rail`) and a central `Gtk.Stack` switching between `"home"`, `"library"`, `"collections"`, and `"reader"`.
+- **Application Shell**: An `Adw.ApplicationWindow` containing a top content `LuminaTitleBar` and an `LuminaShell` widget consisting of a 56px left dark icon rail (`lumina-rail`) and a central `Gtk.Stack` switching between `"home"`, `"library"`, `"collections"`, and `"reader"`.
 - **Auxiliary Services**: Independent Python modules for TTS (`TtsEngine` via `espeak-ng`/`spd-say`), Dictionary (`DictionaryService` via FreeDictionary API), OPDS Catalog management (`OpdsClient`), and local backup bundles (`ExchangeBundle`).
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                       AquileTitleBar                            │
+│                       LuminaTitleBar                            │
 ├──────────┬──────────────────────────────────────────────────────┤
 │  Left    │                   Gtk.Stack                          │
 │  Icon    ├──────────────────────────────────────────────────────┤
@@ -51,7 +51,7 @@ The current Linux application is structured across four primary layers:
 
 #### A. The EPUB Engine Breakdown (`EpubParser` & `ChapterPaginator`)
 The current EPUB pipeline represents the most critical architectural failure in the codebase:
-1. **Destructive Text Extraction**: In `src/aquile/reader/epub_parser.py`:
+1. **Destructive Text Extraction**: In `src/lumina/reader/epub_parser.py`:
    ```python
    def _extract_clean_text(self, html_content: str) -> str:
        cleaned = re.sub(r"<(script|style)[^>]*>.*?</\1>", "", html_content, flags=re.DOTALL | re.IGNORECASE)
@@ -65,7 +65,7 @@ The current EPUB pipeline represents the most critical architectural failure in 
    - All inline and block imagery (`<img src="...">`, `<svg>`, figure captions).
    - All CSS stylesheet rules, publisher margins, drop caps, and indentation.
    - All tables, footnotes, and interactive anchor links (`<a>`).
-2. **Naive Fixed-Width Character Pagination**: In `src/aquile/reader/pagination.py`:
+2. **Naive Fixed-Width Character Pagination**: In `src/lumina/reader/pagination.py`:
    ```python
    avg_char_width = self.font_size * 0.55
    line_height_px = self.font_size * self.line_height
@@ -74,7 +74,7 @@ The current EPUB pipeline represents the most critical architectural failure in 
    chars_per_column = chars_per_line * lines_per_col
    ```
    This algorithm assumes every character occupies `0.55 * font_size` pixels. In proportional Unicode typography (especially with kerning, ligatures, italic slant, and CJK ideographs), this causes wild pagination drift, trailing sentence clipping, and blank column overruns.
-3. **Plain Text Presentation**: In `src/aquile/ui/reader_view.py`:
+3. **Plain Text Presentation**: In `src/lumina/ui/reader_view.py`:
    ```python
    self.left_text_view = Gtk.TextView()
    self.right_text_view = Gtk.TextView()
@@ -85,9 +85,9 @@ The current EPUB pipeline represents the most critical architectural failure in 
    The book content is displayed inside two unformatted GTK multi-line text edit buffers. Actual inspection of rendered output (`build/screenshots/03_reader_canonical.png`) shows raw, unstyled text floating on plain white canvas rectangles. This directly violates `PRD.md` §5.3 (`VP-04`: *"Identical text, line breaks, content order, and page/spread boundaries"*).
 
 #### B. PDF & Comic Rendering Deficiencies
-- **PDF Engine (`src/aquile/reader/pdf_reader.py`)**: Uses `ctypes` bindings to `libpoppler-glib.so.8` and `libcairo.so.2` to rasterize PDF pages directly into pixel buffers (`Gdk.MemoryTexture`), which are passed to a `Gtk.Picture`.
+- **PDF Engine (`src/lumina/reader/pdf_reader.py`)**: Uses `ctypes` bindings to `libpoppler-glib.so.8` and `libcairo.so.2` to rasterize PDF pages directly into pixel buffers (`Gdk.MemoryTexture`), which are passed to a `Gtk.Picture`.
   - *Critical Gap*: The PDF is rendered as a dead bitmap. There is no text selection layer, no search highlighting, no text extraction for dictionary lookup or TTS, and no support for PDF annotations. Zooming requires a full synchronous CPU/Cairo re-rasterization.
-- **Comic Engine (`src/aquile/reader/comic_reader.py`)**: Extracts CBZ/CBR images into memory and displays them via `Gtk.Picture` widgets.
+- **Comic Engine (`src/lumina/reader/comic_reader.py`)**: Extracts CBZ/CBR images into memory and displays them via `Gtk.Picture` widgets.
   - *Critical Gap*: Lacks hardware-accelerated pan-and-zoom, page-turn animations, and thumbnail ribbons.
 
 #### C. Dissonant Shell, Dialogs, and Navigation Structure
@@ -97,13 +97,13 @@ In the Windows reference application, navigation and settings follow a cohesive 
 - Inline dictionary and annotation cards anchored to text selection.
 
 In the current Linux app, these are implemented haphazardly:
-1. **Redundant Nested Headerbars**: The top-level window packs an `AquileTitleBar`, but `LibraryView`, `ComicReaderView`, and `PdfReaderView` each instantiate their own inner `Adw.HeaderBar()`, creating duplicate headers, mismatched button styling, and vertical clutter.
+1. **Redundant Nested Headerbars**: The top-level window packs an `LuminaTitleBar`, but `LibraryView`, `ComicReaderView`, and `PdfReaderView` each instantiate their own inner `Adw.HeaderBar()`, creating duplicate headers, mismatched button styling, and vertical clutter.
 2. **Modal Hijacking via Adwaita Windows**:
    - `SettingsDialog` is an `Adw.PreferencesWindow` that pops up as a giant modal dialog with standard GNOME rounded rows and bright orange accents (`build/screenshots/05_settings_dialog.png`), completely obscuring the shell rail.
    - `TocDialog`, `AnnotationDialog`, `StatisticsDialog`, and `CatalogDialog` are all full modal `Adw.Window` dialogs rather than sleek flyouts.
 3. **The "Acrylic" Illusion**: In `style.css`, acrylic glassmorphism is simulated using:
    ```css
-   .aquile-titlebar {
+   .lumina-titlebar {
        background-color: rgba(58, 58, 58, 0.85);
        background-image: linear-gradient(to bottom, rgba(74, 74, 74, 0.9), rgba(58, 58, 58, 0.85));
    }
@@ -114,7 +114,7 @@ In the current Linux app, these are implemented haphazardly:
 
 ## Part 2: Technical Feasibility & Stack Evaluation
 
-### 2.1 Can Python + GTK4 / Libadwaita Replicate Aquile Reader?
+### 2.1 Can Python + GTK4 / Libadwaita Replicate Lumina Reader?
 
 | Capability | Windows Reference (WinUI 3 / Fluent) | Current Python + GTK4 / Libadwaita | Feasibility in Pure GTK4 |
 | :--- | :--- | :--- | :--- |
@@ -166,7 +166,7 @@ We evaluate four viable architectural pathways:
   - **Uno Platform**: Compiles WinUI 3 XAML directly for Linux using Skia.
   - **Avalonia UI**: High-performance cross-platform XAML framework with `Avalonia.Themes.Fluent`, an exact 1:1 replication of Windows 11 Fluent Design controls.
 - **Pros**:
-  - Direct translation of Windows Aquile Reader XAML layouts, bindings, and control structures.
+  - Direct translation of Windows Lumina Reader XAML layouts, bindings, and control structures.
   - Built-in `ExperimentalAcrylicBorder` renders genuine Skia-based Gaussian blurred surfaces.
   - Native performance with .NET 8 / 9 AOT compilation.
 - **Cons**:
@@ -225,7 +225,7 @@ We evaluate four viable architectural pathways:
    - All assets, icons, and fonts must be original or open-source compatible.
 3. **The G1 Feasibility Flaw**:
    - In `ADR-0001`, Python 3 + GTK4 / Libadwaita was approved based on the WP-04 parity spike.
-   - *However*, that spike verified only that `ChapterPaginator` could split raw strings deterministically across viewport widths; it did **not** verify HTML/CSS fidelity, embedded fonts, image layout, or visual parity against Windows Aquile Reader screenshots.
+   - *However*, that spike verified only that `ChapterPaginator` could split raw strings deterministically across viewport widths; it did **not** verify HTML/CSS fidelity, embedded fonts, image layout, or visual parity against Windows Lumina Reader screenshots.
    - Proceeding with the assumption that `Gtk.TextView` satisfies G1 full-parity feasibility is invalid under `PRD.md` §5.3 (`VP-04`: identical content, formatting, line breaks, and page boundaries).
 
 ### 3.2 The Test Suite Fallacy
@@ -234,7 +234,7 @@ The repository currently reports `Ran 319 tests in ~7.8s — OK`.
 However, analysis of `tests/` reveals why this pass status is misleading:
 - `test_epub_and_pagination.py` verifies that `ChapterPaginator` returns non-empty strings.
 - `test_visual_parity.py` checks that `style.css` contains hex color strings matching regex patterns and that `VP-03` (SSIM image comparison) is explicitly marked **BLOCKED**.
-- The tests test the *implementation's self-consistent abstractions*, not *parity with Aquile Reader B0*.
+- The tests test the *implementation's self-consistent abstractions*, not *parity with Lumina Reader B0*.
 
 ---
 
@@ -265,22 +265,22 @@ We recommend a disciplined, two-track strategy that addresses immediate critical
 To bring the current codebase into compliance without discarding the existing storage, models, and test infrastructure:
 
 #### Step 1: Replace `Gtk.TextView` with `WebKitGTK 6.0` in `ReaderView`
-1. Replace `Gtk.TextView` in `src/aquile/ui/reader_view.py` with `WebKit.WebView`.
+1. Replace `Gtk.TextView` in `src/lumina/ui/reader_view.py` with `WebKit.WebView`.
 2. Package the lightweight, battle-tested `foliate-js` reading engine (from Foliate, GNU GPL v3, used widely across Linux e-readers) or Readium CSS.
-3. Serve EPUB content locally via a custom `WebKitURISchemeHandler` (`aquile-epub://`) that streams uncompressed chapter HTML, CSS, and images directly from `EpubParser` in memory without writing temporary files to disk (`NFR-06`).
+3. Serve EPUB content locally via a custom `WebKitURISchemeHandler` (`lumina-epub://`) that streams uncompressed chapter HTML, CSS, and images directly from `EpubParser` in memory without writing temporary files to disk (`NFR-06`).
 4. Implement two-way communication:
    - Python → WebKit: Apply theme (White, Silver, Sepia, Night, Solarized), adjust font size/family, column count (1 vs 2), line height, and page margin.
    - WebKit → Python: Emit CFI location updates on page turn (for 5s auto-save checkpoint, `NFR-01`), text selection coordinates (for inline dictionary popover), and highlight creation.
 
 #### Step 2: Unify Shell & Eliminate Inner HeaderBars
 1. Remove `Adw.HeaderBar` from `LibraryView`, `ComicReaderView`, and `PdfReaderView`.
-2. Standardize on the top `AquileTitleBar` for window controls and book title.
-3. Convert `SettingsDialog` from an `Adw.PreferencesWindow` into an in-shell `SettingsView` registered on `AquileShell` (`self.shell.add_page("settings", SettingsView(...))`), matching Windows Aquile Reader section 9 layout.
+2. Standardize on the top `LuminaTitleBar` for window controls and book title.
+3. Convert `SettingsDialog` from an `Adw.PreferencesWindow` into an in-shell `SettingsView` registered on `LuminaShell` (`self.shell.add_page("settings", SettingsView(...))`), matching Windows Lumina Reader section 9 layout.
 4. Replace `TocDialog` and `AnnotationDialog` modals with sliding in-reader overlay panels (`Gtk.Overlay` with a revealer sliding from the left margin).
 5. Implement the in-reader display settings popup as a compact dark flyout anchoring to the `tT` button on the top toolbar.
 
 #### Step 3: Implement Text Selection & Search in PDF View
-1. Enhance `src/aquile/reader/pdf_reader.py` to extract text boxes and glyph bounds via `poppler_page_get_text_layout()` or embed `pdf.js` inside a WebKit view for unified reading features.
+1. Enhance `src/lumina/reader/pdf_reader.py` to extract text boxes and glyph bounds via `poppler_page_get_text_layout()` or embed `pdf.js` inside a WebKit view for unified reading features.
 2. Enable direct text selection, dictionary lookup, and text-to-speech synchronization across both EPUB and PDF.
 
 ---
@@ -309,7 +309,7 @@ The current Linux app has achieved commendable storage durability, session track
 
 ### Immediate Action Items:
 1. **Amend Gate G1 Documentation**: File an addendum to `docs/decisions/G1_RATIFICATION.md` noting that `Gtk.TextView` pagination failed visual parity thresholds (`VP-04`) and approving the integration of a web-based rendering canvas (WebKitGTK 6.0).
-2. **Execute Engine Modernization Spike**: Scaffold a prototype `WebKitReaderView` in `src/aquile/ui/` loading EPUB chapters with Readium CSS to prove two-column pagination, embedded typography, and CFI anchor stability under real Xvfb rendering.
+2. **Execute Engine Modernization Spike**: Scaffold a prototype `WebKitReaderView` in `src/lumina/ui/` loading EPUB chapters with Readium CSS to prove two-column pagination, embedded typography, and CFI anchor stability under real Xvfb rendering.
 3. **Re-align Navigation Shell**: Eliminate nested headerbars and refactor modal dialogs into in-shell pages and drawers per `docs/reference/B0/UI_RESEARCH.md`.
 
 This dual approach guarantees immediate, tangible progress toward true parity while preserving architectural integrity and adherence to PRD requirements.

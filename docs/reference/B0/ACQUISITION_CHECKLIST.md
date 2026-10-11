@@ -23,7 +23,7 @@ Availability is **unknown** until an owner verifies it. Proposed Ubuntu/package 
 
 | Resource | Minimum scope to resolve | Owner | Availability | Version / configuration / evidence reference |
 | --- | --- | --- | --- | --- |
-| Windows reference | Exact authorized Aquile Reader build/channel, Windows release, UI language, and test accounts for applicable free/trial/premium states | Product + QA | Clean-room public spec | PRD §1, PRD §4.2, PRD §5 |
+| Windows reference | Exact authorized Lumina Reader build/channel, Windows release, UI language, and test accounts for applicable free/trial/premium states | Product + QA | Clean-room public spec | PRD §1, PRD §4.2, PRD §5 |
 | Ubuntu desktop | Proposed Ubuntu 24.04 LTS and 26.04 LTS, amd64, default GNOME; Wayland and only supported X11 sessions | Engineering + QA | Available (Current host) | Ubuntu 26.04.1 LTS amd64, GNOME |
 | Display/input | Viewports and scales listed in PRD §4.1, smallest supported reference window, keyboard layouts, pointer/trackpad, and supported touch input | QA + design | Available | GNOME Wayland desktop environment |
 | Accessibility | AT-SPI/Orca, keyboard-only, reduced motion, contrast/text enlargement, and applicable assistive-technology environment | QA | Available | AT-SPI2, PyGObject, GNOME a11y |
@@ -38,10 +38,10 @@ Use only original, purpose-built, or verified public-domain material whose prove
 
 | Fixture ID | Format / purpose | Provenance and rights evidence | Content / expected-output coverage | SHA-256 | Storage reference | Status |
 | --- | --- | --- | --- | --- | --- | --- |
-| FIX-EPUB-01 | Text-heavy EPUB (`canonical-text.epub`) | Purpose-built original EPUB3 | Chapters, links, typography, reflow pagination, character offsets | `07f6a9fc053ee27bfc5aadc1db54433960b3c8dc2f2111be7a5de8ada39d40e8` | `fixtures/canonical-text.epub` | Generated & Verified |
+| FIX-EPUB-01 | Text-heavy EPUB (`canonical-text.epub`) | Purpose-built original EPUB3 | Chapters, links, typography, reflow pagination, character offsets | `c18fdc6365306c506ef6a4e8c50bce8de8b10a7c231a5f5062ae677b7c2701c1` | `fixtures/canonical-text.epub` | Generated & Verified |
 | FIX-EPUB-02 | Illustrated EPUB (`illustrated.epub`) | Purpose-built original EPUB3 | Embedded image assets, figure layout, CSS flow | `6b24d4376362c7ac3421c29943b42c6ecae1d6cbd6785686de587600a52fc3a4` | `fixtures/illustrated.epub` | Generated & Verified |
 | FIX-EPUB-03 | Multilingual / RTL EPUB (`multilingual-rtl.epub`) | Purpose-built original EPUB3 | RTL direction (Arabic, Hebrew), CJK shaping, font fallback | `9ef57c1c5f5fd794ad30d1314e86e9206e65edc6cd065a92a5b3e16fb0b604fa` | `fixtures/multilingual-rtl.epub` | Generated & Verified |
-| FIX-PDF-01 | Minimal Multi-Page PDF (`sample-doc.pdf`) | Purpose-built original PDF 1.4 | Page navigation, multi-page rendering | `747ab2e569783e5d7451d4cd61e0844f4905cd14c85e0c8ff8281ca416b77275` | `fixtures/sample-doc.pdf` | Generated & Verified |
+| FIX-PDF-01 | Minimal Multi-Page PDF (`sample-doc.pdf`) | Purpose-built original PDF 1.4 | Page navigation, multi-page rendering | `a5921fd5654f3d0b86978c9105784dab730bd3743e6eb37751f3c3683b3e3514` | `fixtures/sample-doc.pdf` | Generated & Verified |
 | FIX-CBZ-01 | Comic archive (`sample-comic.cbz`) | Purpose-built original CBZ | Sequential image navigation, comic spread flow | `33c946353fa6c4c08ccef11f2c73e938c93144ed9c7c72f1f921f3166a98213f` | `fixtures/sample-comic.cbz` | Generated & Verified |
 | FIX-MAL-01 | Corrupted archive (`malformed-archive.epub`) | Purpose-built malformed ZIP | Safe corrupt file rejection, error dialog | `bd4c36621c327b3cfd9a4032a73296229b482bdabde433ee03916fe9840120ba` | `fixtures/malformed-archive.epub` | Generated & Verified |
 | FIX-MAL-02 | Path traversal attack (`path-traversal.epub`) | Purpose-built unsafe ZIP | Directory traversal protection verification (`NFR-06`) | `773fef2de67c09e3226da6e30219902ce03be95a8355b3ef719711025e17b0a4` | `fixtures/path-traversal.epub` | Generated & Verified |

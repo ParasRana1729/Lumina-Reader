@@ -11,11 +11,11 @@ No commit was made.
 Inputs read before build:
 
 - `scripts/build_deb.sh` (dpkg-deb staging, root-free, XDG-respecting)
-- `debian/control` (Source `aquile-reader`, `Rules-Requires-Root: no`, amd64,
+- `debian/control` (Source `lumina-reader`, `Rules-Requires-Root: no`, amd64,
   Depends `python3, python3-gi, gir1.2-gtk-4.0, gir1.2-adw-1, gir1.2-poppler-0.18`)
 - `debian/rules` (`dh $@` minimal)
-- `data/org.antigravity.AquileReader.desktop` (source entry; dev-machine
-  `Exec=python3 /home/.../run_aquile.py %F`, rewritten at stage time)
+- `data/com.luminareader.desktop` (source entry; dev-machine
+  `Exec=python3 /home/.../run_lumina.py %F`, rewritten at stage time)
 
 Commands:
 
@@ -39,7 +39,7 @@ The script now prefers `fakeroot dpkg-deb --build` when available.
 
 ## 2. Artifact: filename + size
 
-- Path: `/tmp/opencode/aquile-reader_0.1.0-preview_amd64.deb`
+- Path: `/tmp/opencode/lumina-reader_0.1.0-preview_amd64.deb`
 - Size: 64062 bytes (63K, `ls -lh`)
 - sha256: `85176e7f839b3b93784a2bf6fc00486d3b6e2aab98248fe1255de15482728fdb`
 - Before hardening (with `__pycache__/*.pyc` shipped): 201984 bytes.
@@ -48,14 +48,14 @@ The script now prefers `fakeroot dpkg-deb --build` when available.
 ## 3. `dpkg-deb -f` fields
 
 ```text
-Package: aquile-reader
+Package: lumina-reader
 Version: 0.1.0-preview
 Section: office
 Priority: optional
 Architecture: amd64
 Installed-Size: 424
 Depends: python3, python3-gi, gir1.2-gtk-4.0, gir1.2-adw-1, gir1.2-poppler-0.18
-Maintainer: Aquile Reader Ubuntu Port Team
+Maintainer: Lumina Reader Ubuntu Port Team
 Description: Modern, customizable eBook reader (Ubuntu port preview)
  Local DRM-free EPUB/PDF/CBZ/CBR reading with two-column layout,
  annotations, and offline-first library storage. Unsigned preview build.
@@ -75,18 +75,18 @@ Notes:
 ./
 ./usr/
 ./usr/bin/
--rwxr-xr-x ./usr/bin/aquile-reader
+-rwxr-xr-x ./usr/bin/lumina-reader
 ./usr/share/
 ./usr/share/applications/
--rw-rw-r-- ./usr/share/applications/org.antigravity.AquileReader.desktop
-./usr/share/aquile-reader/
--rwxr-xr-x ./usr/share/aquile-reader/run_aquile.py
-./usr/share/aquile-reader/src/
-./usr/share/aquile-reader/src/aquile/
+-rw-rw-r-- ./usr/share/applications/com.luminareader.desktop
+./usr/share/lumina-reader/
+-rwxr-xr-x ./usr/share/lumina-reader/run_lumina.py
+./usr/share/lumina-reader/src/
+./usr/share/lumina-reader/src/lumina/
 ... (no __pycache__, no *.pyc after hardening)
-./usr/share/doc/aquile-reader/README.Debian
-./usr/share/doc/aquile-reader/control.txt
-./usr/share/mime/packages/aquile-reader.xml
+./usr/share/doc/lumina-reader/README.Debian
+./usr/share/doc/lumina-reader/control.txt
+./usr/share/mime/packages/lumina-reader.xml
 ```
 
 Control archive (`dpkg-deb --ctrl-tarfile | tar -tvf -`):
@@ -102,13 +102,13 @@ notes); no secrets. No setuid/setgid entries
 
 ## 5. Desktop + MIME verification
 
-Source `data/org.antigravity.AquileReader.desktop`:
+Source `data/com.luminareader.desktop`:
 
 ```ini
 [Desktop Entry]
-Name=Aquile Reader
+Name=Lumina Reader
 Comment=Modern, customizable eBook reader with two-column layout
-Exec=python3 /home/paras/Documents/Projects/Aquile-Reader/run_aquile.py %F
+Exec=python3 /home/paras/Documents/Projects/Lumina-Reader/run_lumina.py %F
 Icon=book-open-symbolic
 Terminal=false
 Type=Application
@@ -121,9 +121,9 @@ Staged entry in the `.deb` (after script rewrite + hardening):
 
 ```ini
 [Desktop Entry]
-Name=Aquile Reader
+Name=Lumina Reader
 Comment=Modern, customizable eBook reader with two-column layout
-Exec=/usr/bin/aquile-reader %F
+Exec=/usr/bin/lumina-reader %F
 Icon=book-open-symbolic
 Terminal=false
 Type=Application
@@ -135,7 +135,7 @@ NoDisplay=false
 
 Checks (against extracted `.deb`):
 
-- `Exec=/usr/bin/aquile-reader %F` — PASS (dev absolute path rewritten).
+- `Exec=/usr/bin/lumina-reader %F` — PASS (dev absolute path rewritten).
 - `MimeType` contains `application/epub+zip` — PASS.
 - `MimeType` contains `application/pdf` — PASS.
 - `MimeType` also advertises CBZ + CBR (matches MIME XML) — PASS (hardened;
@@ -149,7 +149,7 @@ hint: value item "Literature" in key "Categories" ... can be extended with
 another category among Education or Science
 ```
 
-MIME XML (`usr/share/mime/packages/aquile-reader.xml` in `.deb`):
+MIME XML (`usr/share/mime/packages/lumina-reader.xml` in `.deb`):
 
 - Registers `application/epub+zip (*.epub)` — PASS.
 - Registers `application/pdf (*.pdf)` — PASS.
@@ -169,27 +169,27 @@ No `dpkg -i` was run (would mutate the host and need root). Instead:
 
 ```bash
 rm -rf /tmp/opencode/fs-size && mkdir -p /tmp/opencode/fs-size
-dpkg-deb --fsys-tarfile /tmp/opencode/aquile-reader_0.1.0-preview_amd64.deb \
+dpkg-deb --fsys-tarfile /tmp/opencode/lumina-reader_0.1.0-preview_amd64.deb \
   | tar -x -C /tmp/opencode/fs-size   # exit 0
-ls -l /tmp/opencode/fs-size/usr/bin/aquile-reader
-# -rwxr-xr-x ... /usr/bin/aquile-reader
-cat /tmp/opencode/fs-size/usr/bin/aquile-reader
+ls -l /tmp/opencode/fs-size/usr/bin/lumina-reader
+# -rwxr-xr-x ... /usr/bin/lumina-reader
+cat /tmp/opencode/fs-size/usr/bin/lumina-reader
 # #!/bin/sh
-# exec python3 /usr/share/aquile-reader/run_aquile.py "$@"
-python3 -m py_compile /tmp/opencode/fs-size/usr/share/aquile-reader/run_aquile.py
+# exec python3 /usr/share/lumina-reader/run_lumina.py "$@"
+python3 -m py_compile /tmp/opencode/fs-size/usr/share/lumina-reader/run_lumina.py
 # compiles OK
 rm -rf /tmp/opencode/fs-size  # simulated uninstall leaves no residue
 ```
 
 - Launcher exists, mode 0755, content delegates to
-  `/usr/share/aquile-reader/run_aquile.py` — PASS.
+  `/usr/share/lumina-reader/run_lumina.py` — PASS.
 - Direct execution of the extracted launcher is NOT expected to work (it
   references the installed absolute path `/usr/share/...`); `py_compile` of
   the payload entry point passes instead. Full launch remains an AT-10
   on-machine check after a real install.
 - No hardcoded `/home/` or `/root/` paths in payload `src` (grep excluding
   `__pycache__` clean) — PASS; runtime data honors
-  `$XDG_DATA_HOME` (`src/aquile/storage/database.py:17-18`).
+  `$XDG_DATA_HOME` (`src/lumina/storage/database.py:17-18`).
 - Simulated uninstall (remove extract dir) is clean — PASS. Real
   install/update/uninstall + data-preservation on Ubuntu 24.04/26.04 remains
   AT-10 work.
@@ -198,7 +198,7 @@ rm -rf /tmp/opencode/fs-size  # simulated uninstall leaves no residue
 
 `git diff --stat`: `scripts/build_deb.sh | 24 ++++... 1 file changed`.
 `git status` confirms no `src/` or `tests/` modifications
-(an unrelated untracked `src/aquile/ui/tts_controls.py` from concurrent work
+(an unrelated untracked `src/lumina/ui/tts_controls.py` from concurrent work
 was left untouched).
 
 1. Strip `__pycache__` / `*.py[co]` after staging (198K → 63K; avoids stale
@@ -224,12 +224,12 @@ was left untouched).
   signing, no `debsigs`, no repository GPG key, no key custody/rotation.
   Script header + `README.Debian` state this. Do not distribute unsigned
   `.deb`s as updates. Manual release step per `scripts/build_deb.sh` header.
-- G-1: source desktop `data/org.antigravity.AquileReader.desktop` still carries
+- G-1: source desktop `data/com.luminareader.desktop` still carries
   a dev-machine absolute `Exec` and lacks `NoDisplay=false` / CBR mime; the
   staged file is corrected at build time. Consider versioning the corrected
   entry or a `data/*.desktop.in` template (outside this task's allowed paths).
 - G-2: MIME XML has no versioned source (`data/*.xml` absent); generated inline
-  in the build script. Consider checking in `data/aquile-reader-mime.xml`.
+  in the build script. Consider checking in `data/lumina-reader-mime.xml`.
 - G-3: data-file owners are `user:user` without fakeroot (warning only);
   install `fakeroot` on the build host or build via `debuild` for root-owned
   entries.
@@ -258,11 +258,11 @@ Per `PRD.md` §Ubuntu scope and `IMPLEMENTATION_PLAN.md` WP-16:
 
 ```bash
 bash scripts/build_deb.sh --out /tmp/opencode
-dpkg-deb -f /tmp/opencode/aquile-reader_0.1.0-preview_amd64.deb
-dpkg-deb -c /tmp/opencode/aquile-reader_0.1.0-preview_amd64.deb | head
+dpkg-deb -f /tmp/opencode/lumina-reader_0.1.0-preview_amd64.deb
+dpkg-deb -c /tmp/opencode/lumina-reader_0.1.0-preview_amd64.deb | head
 rm -rf /tmp/opencode/smoke && mkdir -p /tmp/opencode/smoke \
-  && dpkg-deb --fsys-tarfile /tmp/opencode/aquile-reader_0.1.0-preview_amd64.deb \
+  && dpkg-deb --fsys-tarfile /tmp/opencode/lumina-reader_0.1.0-preview_amd64.deb \
   | tar -x -C /tmp/opencode/smoke \
-  && cat /tmp/opencode/smoke/usr/share/applications/org.antigravity.AquileReader.desktop \
-  && cat /tmp/opencode/smoke/usr/share/mime/packages/aquile-reader.xml
+  && cat /tmp/opencode/smoke/usr/share/applications/com.luminareader.desktop \
+  && cat /tmp/opencode/smoke/usr/share/mime/packages/lumina-reader.xml
 ```

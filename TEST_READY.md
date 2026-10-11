@@ -60,8 +60,8 @@ python3 spikes/parity_spike/run_spike.py
 | **Tier 3** | `test_library_statistics_multi_format_aggregation` | `StatisticsRepository` | Aggregates sessions across mixed formats (`epub`, `pdf`, `cbz`) into unified `LibraryStatistics` | FR-15, FR-20 |
 | **Tier 3** | `test_progress_and_session_atomic_persistence` | `ReadingProgressRepository` + `StatisticsRepository` | Atomic updates to reading location and session history under SQLite WAL mode | NFR-01, NFR-02 |
 | **Tier 4** | `test_complete_reading_session_lifecycle` | `ReadingSessionTracker` $\to$ `StatisticsRepository` | End-to-end reading session lifecycle: start, 3 pages, pause, resume 2 pages, end, verify | FR-15, AT-01, AT-03 |
-| **Tier 4** | `test_e2e_pdf_import_navigate_resume` | `AquileReaderApp` $\to$ `LibraryView` $\to$ `PdfReaderView` | E2E import of `sample-doc.pdf`, page navigation, auto-save checkpoint, close, reopen & resume | FR-01, FR-06, NFR-01 |
-| **Tier 4** | `test_e2e_cbz_import_navigate_resume` | `AquileReaderApp` $\to$ `LibraryView` $\to$ `ComicReaderView` | E2E import of `sample-comic.cbz`, spread navigation, auto-save checkpoint, close, reopen & resume | FR-01, FR-06, NFR-01 |
+| **Tier 4** | `test_e2e_pdf_import_navigate_resume` | `LuminaReaderApp` $\to$ `LibraryView` $\to$ `PdfReaderView` | E2E import of `sample-doc.pdf`, page navigation, auto-save checkpoint, close, reopen & resume | FR-01, FR-06, NFR-01 |
+| **Tier 4** | `test_e2e_cbz_import_navigate_resume` | `LuminaReaderApp` $\to$ `LibraryView` $\to$ `ComicReaderView` | E2E import of `sample-comic.cbz`, spread navigation, auto-save checkpoint, close, reopen & resume | FR-01, FR-06, NFR-01 |
 | **Tier 4** | `test_library_sessions_cascade_on_book_deletion` | `BookRepository.delete` | Foreign key `ON DELETE CASCADE` removes all associated sessions and statistics records | NFR-02, FR-20 |
 
 ---

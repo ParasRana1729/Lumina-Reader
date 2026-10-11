@@ -313,7 +313,7 @@ mod tests {
 
     #[test]
     fn test_scan_directory_books() {
-        let temp_dir = std::env::temp_dir().join(format!("aquile_scan_test_{}", std::process::id()));
+        let temp_dir = std::env::temp_dir().join(format!("lumina_scan_test_{}", std::process::id()));
         let sub_dir = temp_dir.join("subfolder");
         fs::create_dir_all(&sub_dir).unwrap();
 
@@ -340,7 +340,7 @@ mod tests {
 
     #[test]
     fn test_import_multiple_books_internal() {
-        let temp_dir = std::env::temp_dir().join(format!("aquile_import_test_{}", std::process::id()));
+        let temp_dir = std::env::temp_dir().join(format!("lumina_import_test_{}", std::process::id()));
         let db_file = temp_dir.join("test.db");
         fs::create_dir_all(&temp_dir).unwrap();
 

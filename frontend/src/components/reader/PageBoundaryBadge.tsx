@@ -18,7 +18,7 @@ export const PageBoundaryBadge: React.FC<PageBoundaryBadgeProps> = ({
 }) => {
   const currentTheme = READER_THEMES[theme] || READER_THEMES.night;
 
-  // Native Windows Aquile Reader (frames f_006/f_011): the page indicator is
+  // Lumina Reader (frames f_006/f_011): the page indicator is
   // not an inline label after the text. It is a complete standalone page that
   // separates one content page from the next — an otherwise empty page with
   // "N of M" centered, closed by a full-width divider rule above the next

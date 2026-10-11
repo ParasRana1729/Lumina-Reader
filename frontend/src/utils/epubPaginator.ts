@@ -140,9 +140,9 @@ function splitParagraphIntoChunks(paragraph: string, maxChunkLength: number): st
 }
 
 /**
- * Clean room EPUB parser and paginator for native Aquile Reader.
+ * Clean room EPUB parser and paginator for native Lumina Reader.
  * Parses OPF, NCX, HTML chapters, suppresses inline print page number artifacts,
- * and splits content into authentic Aquile Reader pages.
+ * and splits content into authentic Lumina Reader pages.
  */
 export async function parseEpubToPages(
   data: ArrayBuffer,

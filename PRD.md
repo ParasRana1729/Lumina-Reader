@@ -1,30 +1,30 @@
-# Product Requirements Document: Aquile Reader for Ubuntu
+# Product Requirements Document: Lumina Reader for Ubuntu
 
 | Field | Value |
 | --- | --- |
 | Document version | 1.0 |
 | Date | 2026-10-03 |
 | Status | Draft; reference-baseline and product-owner approval required |
-| Product | Authorized Ubuntu desktop port of Aquile Reader |
-| Reference product | Aquile Reader for Windows; one specific release must be selected and frozen at Gate G1 |
+| Product | Authorized Ubuntu desktop port of Lumina Reader |
+| Reference product | Lumina Reader for Windows; one specific release must be selected and frozen at Gate G1 |
 | Proposed release targets | Ubuntu Desktop 24.04 LTS and 26.04 LTS, amd64, default GNOME desktop |
 | Primary requirement | Look and behave like the reference application, not merely offer similar reading features |
 
 ## 1. Product intent
 
-Bring Aquile Reader to Ubuntu without making existing Aquile Reader users learn a different application. The port must preserve the Windows application's app-owned visual design, reading experience, navigation, controls, settings, feature availability, and observable behavior. Ubuntu-specific integration must not become an excuse to redesign the application.
+Bring Lumina Reader to Ubuntu without making existing Lumina Reader users learn a different application. The port must preserve the Windows application's app-owned visual design, reading experience, navigation, controls, settings, feature availability, and observable behavior. Ubuntu-specific integration must not become an excuse to redesign the application.
 
-**Product promise:** "Aquile Reader, on Ubuntu" — not "an eBook reader inspired by Aquile Reader."
+**Product promise:** "Lumina Reader, on Ubuntu" — not "an eBook reader inspired by Lumina Reader."
 
 **Evidence limitation:** This document was informed by public first-party documentation and the Windows Store listing title. No upstream source code or running Windows build was inspected. Exact UI measurements, current defaults, complete feature availability, account behavior, and format-specific capabilities remain unverified until Gate G1. Requirements below are proposed product requirements, not claims that those details have already been measured.
 
-**Authorization dependency:** Aquile Reader's published terms restrict copying, modification, trademarks, source extraction, and derivative versions (`S6`). Written authorization and appropriate licenses are prerequisites for an authorized port and reuse of protected assets, code, or services. This document does not establish those rights. If authorization cannot be obtained, a separately branded alternative would require a different product brief; it would not fulfill this port's promise.
+**Authorization dependency:** Lumina Reader's published terms restrict copying, modification, trademarks, source extraction, and derivative versions (`S6`). Written authorization and appropriate licenses are prerequisites for an authorized port and reuse of protected assets, code, or services. This document does not establish those rights. If authorization cannot be obtained, a separately branded alternative would require a different product brief; it would not fulfill this port's promise.
 
 ## 2. Users, goals, and non-goals
 
 ### Primary users
 
-- Existing Aquile Reader users moving from Windows to Ubuntu.
+- Existing Lumina Reader users moving from Windows to Ubuntu.
 - Readers using Windows or Android alongside an Ubuntu desktop, where authorized cross-device interoperability is available.
 - Ubuntu users managing local, DRM-free books, documents, and comics.
 - Readers relying on typography customization, annotations, keyboard operation, or read-aloud functionality.
@@ -48,7 +48,7 @@ Bring Aquile Reader to Ubuntu without making existing Aquile Reader users learn 
 
 An internal prototype may implement a subset. A subset must be labeled a preview and must not be presented as a completed parity port.
 
-## 3. What "exactly like Aquile Reader" means
+## 3. What "exactly like Lumina Reader" means
 
 All baseline-supported features are **P0 release requirements**. There is no "core-only MVP" exception to the public release promise. Mandatory visual, Ubuntu, and quality requirements in Sections 5, 7, and 8 are also release-blocking; proposed platform scope and performance budgets become binding when approved at G1.
 
@@ -221,7 +221,7 @@ Choose the implementation stack only after a parity spike proves font metrics, E
 
 ### 8.2 Proposed performance acceptance budgets
 
-These budgets are product targets, **not measured Aquile Reader performance**. Ratify benchmark definitions and feasibility at G1; resolve any incompatible target before baseline approval. Changes require documented product approval rather than silently relaxing the definition of parity. Response latency must meet the approved absolute budget and the B0 regression rule below; it is not subject to VP-05's symmetric intentional-timing tolerance.
+These budgets are product targets, **not measured Lumina Reader performance**. Ratify benchmark definitions and feasibility at G1; resolve any incompatible target before baseline approval. Changes require documented product approval rather than silently relaxing the definition of parity. Response latency must meet the approved absolute budget and the B0 regression rule below; it is not subject to VP-05's symmetric intentional-timing tolerance.
 
 Benchmark on a documented four-core amd64 machine with 8 GB RAM, SSD, 60 Hz display, and the same background-load conditions. Use a 1,000-book library, a canonical text-focused EPUB up to 10 MiB, and agreed large PDF/comic fixtures. Record percentiles over at least 30 application/book opens and 200 page changes.
 
@@ -291,7 +291,7 @@ Dates and effort estimates follow the upstream access and portability audit; thi
 
 | Item | Required resolution | Accountable role / gate |
 | --- | --- | --- |
-| Authorization and branding | Confirm permission to produce an Aquile Reader port and reuse source/assets/services; published terms do not grant it. | Product + legal / G0 |
+| Authorization and branding | Confirm permission to produce an Lumina Reader port and reuse source/assets/services; published terms do not grant it. | Product + legal / G0 |
 | Reference version | Select the exact Windows release and freeze B0; identify current versus historical documented features. | Product + QA / G1 |
 | Upstream portability | Audit actual source/framework availability and rendering dependencies. Prove typography/pagination before selecting a framework. | Engineering + design / G1 |
 | Ubuntu/package scope | Approve 24.04/26.04 amd64, session coverage, `.deb`/APT delivery, supported input/locales, and benchmark hardware. | Product + engineering / G1 |
@@ -310,7 +310,7 @@ An unresolved required sync, purchase, asset, or format dependency prevents call
 - [ ] All applicable P0 tests pass across the approved Ubuntu matrix, with only individually approved platform/safety/accessibility/performance exceptions. Performance exceptions may not waive missing features, incorrect content, or data-safety requirements.
 - [ ] Every golden UI state meets the visual thresholds and has design/QA sign-off; no unapproved app redesign or pagination drift remains.
 - [ ] Core end-to-end workflows have equivalent actions and outcomes: import → find → read/customize → annotate → resume; listen/lookup; browse/download; sync and premium where present.
-- [ ] At least five existing Windows Aquile Reader users complete the core local-reading workflows without app-specific retraining; feedback does not identify an unapproved navigation or interaction difference.
+- [ ] At least five existing Windows Lumina Reader users complete the core local-reading workflows without app-specific retraining; feedback does not identify an unapproved navigation or interaction difference.
 - [ ] No release-blocking functional defect, lost acknowledged data, critical/high security defect, or unsupported rights/service usage remains.
 - [ ] Performance, accessibility, persistence, clean-install/update, and 24-hour endurance evidence is available.
 - [ ] The exception register, migration coverage, supported matrix, privacy/network disclosures, license notices, update channel, and support/recovery instructions are published.
@@ -321,11 +321,11 @@ An unresolved required sync, purchase, asset, or format dependency prevents call
 
 Sources reviewed on 2026-10-03. Public pages can change and some historical Windows documentation may not match the current release; B0 verification remains mandatory.
 
-- **S1 — Current official website:** [Aquile Reader](https://www.aquilereader.in/). General features, customization, catalogs, statistics, and Windows/Android cross-device sync.
-- **S2 — Official Windows introduction:** [Aquile Reader — An immersive reading experience](https://aquilereader.wordpress.com/). Windows feature list, including cross-book collections and book details.
-- **S3 — Windows distribution listing:** [Microsoft Store: Aquile Reader](https://apps.microsoft.com/detail/9p08t4jltqnk?gl=US&hl=en-US). Listing title names EPUB/PDF/CBZ/CBR; the JavaScript-dependent full description was not verified.
-- **S4 — Official Windows how-to:** [How to on Windows](https://aquilereader.wordpress.com/how-to-windows/). Settings/Reader dictionary language, diagnostics, and premium upgrade flow; exact current layout requires B0 confirmation.
-- **S5 — Official historical hotkey documentation:** [Aquile Reader blog](https://aquilereader.wordpress.com/blog/), "Keyboard hotkeys" entry, dated 2020-06-14 and updated 2021-01-19. Discovery evidence only; verify the complete current map in B0.
-- **S6 — Published terms:** [Aquile Reader terms of service](https://www.aquilereader.in/terms.html), effective date shown as 2023-10-27. Rights restrictions and third-party service dependencies; obtain appropriate authorization and legal review.
-- **S7 — Official Android FAQ:** [FAQ — Android](https://www.aquilereader.in/faq-android.html). Supporting evidence for Windows/Android sync and platform-specific purchases; not the desktop UI/behavior baseline.
+- **S1 — Current official website:** [Lumina Reader](https://www.luminareader.in/). General features, customization, catalogs, statistics, and Windows/Android cross-device sync.
+- **S2 — Official Windows introduction:** [Lumina Reader — An immersive reading experience](https://luminareader.wordpress.com/). Windows feature list, including cross-book collections and book details.
+- **S3 — Windows distribution listing:** [Microsoft Store: Lumina Reader](https://apps.microsoft.com/detail/9p08t4jltqnk?gl=US&hl=en-US). Listing title names EPUB/PDF/CBZ/CBR; the JavaScript-dependent full description was not verified.
+- **S4 — Official Windows how-to:** [How to on Windows](https://luminareader.wordpress.com/how-to-windows/). Settings/Reader dictionary language, diagnostics, and premium upgrade flow; exact current layout requires B0 confirmation.
+- **S5 — Official historical hotkey documentation:** [Lumina Reader blog](https://luminareader.wordpress.com/blog/), "Keyboard hotkeys" entry, dated 2020-06-14 and updated 2021-01-19. Discovery evidence only; verify the complete current map in B0.
+- **S6 — Published terms:** [Lumina Reader terms of service](https://www.luminareader.in/terms.html), effective date shown as 2023-10-27. Rights restrictions and third-party service dependencies; obtain appropriate authorization and legal review.
+- **S7 — Official Android FAQ:** [FAQ — Android](https://www.luminareader.in/faq-android.html). Supporting evidence for Windows/Android sync and platform-specific purchases; not the desktop UI/behavior baseline.
 - **S8 — Ubuntu support baseline:** [Canonical Ubuntu release cycle](https://ubuntu.com/about/release-cycle). Confirms 24.04 LTS and 26.04 LTS as supported LTS releases; application support scope remains a product decision.

@@ -108,7 +108,7 @@ export const AnnotationsView: React.FC<AnnotationsViewProps> = ({ onOpenBook }) 
   // Export Annotations to Markdown
   const handleExportMarkdown = () => {
     if (filteredAnnotations.length === 0) return;
-    let md = '# Aquile Reader - Annotations & Notes\n\n';
+    let md = '# Lumina Reader - Annotations & Notes\n\n';
     filteredAnnotations.forEach((ann, idx) => {
       md += `### ${idx + 1}. ${ann.bookTitle || 'Book'} (Page ${ann.page || 'N/A'})\n`;
       md += `> "${ann.selectedText || ann.text || ''}"\n\n`;
@@ -122,7 +122,7 @@ export const AnnotationsView: React.FC<AnnotationsViewProps> = ({ onOpenBook }) 
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', `aquile-annotations-${new Date().toISOString().slice(0, 10)}.md`);
+    link.setAttribute('download', `lumina-annotations-${new Date().toISOString().slice(0, 10)}.md`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

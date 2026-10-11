@@ -1,18 +1,18 @@
-# Comprehensive UX & Parity Audit: Linux Aquile Reader Implementation
+# Comprehensive UX & Parity Audit: Linux Lumina Reader Implementation
 
 **Audit Date:** 2026-10-05  
 **Auditor Role:** Linux App UX Auditor  
 **Reference Artifacts Analyzed:**
-- Linux Implementation Screencast: `/home/paras/Videos/Screencasts/linux-aquile-reader.webm` (Frames `linux_001.png` – `linux_045.png`)
-- Windows B0 Reference Screencast: `/home/paras/Videos/Screencasts/windows-aquile-reader.mp4` (Frames `win_001.png` – `win_055.png`)
-- Linux Codebase: `src/aquile/ui/` (`aquile_shell.py`, `home_view.py`, `library_view.py`, `pdf_view.py`, `catalog_dialog.py`, `statistics_dialog.py`, `settings_dialog.py`, `style.css`)
+- Linux Implementation Screencast: `/home/paras/Videos/Screencasts/linux-lumina-reader.webm` (Frames `linux_001.png` – `linux_045.png`)
+- Windows B0 Reference Screencast: `/home/paras/Videos/Screencasts/windows-lumina-reader.mp4` (Frames `win_001.png` – `win_055.png`)
+- Linux Codebase: `src/lumina/ui/` (`lumina_shell.py`, `home_view.py`, `library_view.py`, `pdf_view.py`, `catalog_dialog.py`, `statistics_dialog.py`, `settings_dialog.py`, `style.css`)
 - Normative Specifications: `PRD.md`, `AGENTS.md`, `docs/reference/B0/UI_RESEARCH.md`
 
 ---
 
 ## Executive Summary & Verdict
 
-The current Linux implementation of **Aquile Reader** is a rudimentary, disjointed prototype that fundamentally misses the visual elegance, architectural structure, and interaction fluidity of the Windows B0 product. 
+The current Linux implementation of **Lumina Reader** is a rudimentary, disjointed prototype that fundamentally misses the visual elegance, architectural structure, and interaction fluidity of the Windows B0 product. 
 
 Rather than delivering the signature Windows Fluent Design aesthetic—defined by deep Mica/Acrylic translucency, dynamic wallpaper blurs, unified client-area titlebars, integrated full-page views, and graceful book-reading typography—the Linux build is an ad-hoc collection of stock GTK4/Libadwaita widgets wrapped in a sterile, flat light-gray `#F2F2F2` container. Major product hubs (Catalogs, Statistics, Settings) are erroneously implemented as jarring, floating modal dialogs (`Adw.Window` / `Adw.PreferencesWindow`) that completely break navigation flow and trap the user. Furthermore, the reader experience for PDFs mimics a basic document utility (akin to a barebones Evince clone with page spinners and zoom percentages) rather than an immersive, modern digital book reader with fluid continuous scrolling and adaptive themes.
 
@@ -26,15 +26,15 @@ The Linux build cannot be characterized as a faithful port; it is an unapproved,
 | Design Vector | Windows B0 Ground Truth (`win_*.png`) | Current Linux Implementation (`linux_*.png`) | Severity |
 | :--- | :--- | :--- | :--- |
 | **Materiality & Background** | **Mica / Acrylic Translucency**: Sophisticated wallpaper sampling with variable Gaussian blur, depth layering, and subtle texture tinting (`win_001`, `win_016`, `win_035`). | **Sterile Flat Gray**: Hardcoded `#F2F2F2` / `#FFFFFF` solid opaque background. Zero translucency, zero blur, completely flat and washed out (`linux_001`). | **Critical (VP-01)** |
-| **Window Frame & Chrome** | Unified titlebar seamlessly blended into the app canvas with custom brand title and compact window controls (`win_001`). | Double-chrome conflict: A custom top titlebar (`AquileTitleBar`) stacked above an internal GTK HeaderBar (`Adw.HeaderBar`) in views like Library (`linux_018`). | **High (VP-02)** |
+| **Window Frame & Chrome** | Unified titlebar seamlessly blended into the app canvas with custom brand title and compact window controls (`win_001`). | Double-chrome conflict: A custom top titlebar (`LuminaTitleBar`) stacked above an internal GTK HeaderBar (`Adw.HeaderBar`) in views like Library (`linux_018`). | **High (VP-02)** |
 | **Color Schemes & Theming** | System-wide coherent palette (e.g., "Dark Side", "Vine Yard", "Clear Sky") with accent-tinted highlights, rich card surfaces, and synced controls. | Fragmented CSS classes. Changing theme accent in Settings only recolors the single active rail icon button, leaving the entire window canvas untouched (`linux_040`, `linux_045`). | **High (VP-03)** |
 | **Visual Hierarchy & Depth** | Elevated book cards with soft multi-layer drop shadows, glowing hover rings, and smooth scale transitions (`win_001`, `win_054`). | Flat borders with negligible elevation (`box-shadow: 0 2px 8px alpha(black, 0.35)` on raw white containers); looks like a 2012 web card (`linux_001`). | **Medium (VP-04)** |
 
 ### Detailed Visual Findings
 1. **Total Absence of Mica / Acrylic Backdrop:**
-   In Windows Aquile Reader, the application creates a signature atmospheric reading environment by allowing desktop wallpaper textures to softly bleed through the window with dark Mica/Acrylic materials (`win_016`, `win_035`, `win_040`). The Linux application has completely replaced this with an abrasive `#F2F2F2` flat background (`src/aquile/ui/style.css:159`).
+   In Windows Lumina Reader, the application creates a signature atmospheric reading environment by allowing desktop wallpaper textures to softly bleed through the window with dark Mica/Acrylic materials (`win_016`, `win_035`, `win_040`). The Linux application has completely replaced this with an abrasive `#F2F2F2` flat background (`src/lumina/ui/style.css:159`).
 2. **Broken Accent Propagation:**
-   In `linux_037.png` and `linux_040.png`, the user selects "Clear Sky" accent and "Silver" theme. In response, only the `.aquile-rail .rail-active` button changes its CSS background (`aquile_shell.py:146`). The rest of the interface (header, library rows, cards, background) remains completely unaware of the theme change.
+   In `linux_037.png` and `linux_040.png`, the user selects "Clear Sky" accent and "Silver" theme. In response, only the `.lumina-rail .rail-active` button changes its CSS background (`lumina_shell.py:146`). The rest of the interface (header, library rows, cards, background) remains completely unaware of the theme change.
 
 ---
 
@@ -88,11 +88,11 @@ LINUX PROTOTYPE DISASTER (linux_001.png):
 
 ### Comparison Analysis (`win_018.png` vs `linux_018.png`)
 1. **Flat `Gtk.ListBox` vs Visual Cover Shelves:**
-   Windows Aquile Reader is celebrated for its warm, shelf-like cover grid with cream/paper background options, rich thumbnail artwork, and metadata overlays.  
+   Windows Lumina Reader is celebrated for its warm, shelf-like cover grid with cream/paper background options, rich thumbnail artwork, and metadata overlays.  
    The Linux implementation (`library_view.py:114-117`) renders a stark, uninspiring GTK `boxed-list` row (`linux_018.png`). It looks like a generic system utility (such as GNOME Disk Usage Analyzer or Settings) rather than an eBook library.
 2. **Double Headerbar Clutter:**
    Navigating to the Library view renders **two stacked headerbars**:
-   - Top: `AquileTitleBar` with "Aquile Reader" and window min/max/close controls.
+   - Top: `LuminaTitleBar` with "Lumina Reader" and window min/max/close controls.
    - Second Bar: `Adw.HeaderBar` containing an import button, collections button, stats button, catalog globe, sync button, "My Local Library" subtitle, format dropdown, sort dropdown, and search entry.  
    This double-decker header layout wastes vertical space and looks entirely unpolished.
 3. **Metadata Absurdity ("140 ch"):**
@@ -109,10 +109,10 @@ LINUX PROTOTYPE DISASTER (linux_001.png):
 ### Viewer Canvas Flaws (`linux_004.png` – `linux_017.png` vs `win_005.png` – `win_015.png`)
 
 1. **Evince-Style Document Utility vs Immersive Book Reader:**
-   - In Windows Aquile Reader (`win_005.png`, `win_009.png`), reading a document immerses the user in the active theme (dark night mode, sepia, or paper). Document pages seamlessly integrate into the background with elegant serif typography ("23 of 239" in italics) and fluid controls.
+   - In Windows Lumina Reader (`win_005.png`, `win_009.png`), reading a document immerses the user in the active theme (dark night mode, sepia, or paper). Document pages seamlessly integrate into the background with elegant serif typography ("23 of 239" in italics) and fluid controls.
    - In Linux (`linux_004.png`), the viewer immediately reverts to a crude Poppler/Cairo rasterizer: a giant stark-white page pasted onto a light-gray canvas, surrounded by a desktop document toolbar featuring "Fit Page", "Fit Width", raw zoom percentages ("216%", "464%"), and numeric spinboxes (`[ 3 ] / 140`).
 2. **Lack of Continuous Scrolling & Fluid Transitions:**
-   - As demonstrated in `win_009.png` and `win_012.png`, Windows Aquile Reader supports smooth continuous vertical scrolling where consecutive pages flow naturally into one another.
+   - As demonstrated in `win_009.png` and `win_012.png`, Windows Lumina Reader supports smooth continuous vertical scrolling where consecutive pages flow naturally into one another.
    - The Linux prototype (`pdf_view.py:189-195`) renders only **one single page at a time** into a `Gtk.Picture` widget. Advancing pages produces jarring, abrupt image swaps without transition animations, smooth momentum scrolling, or two-page spread rendering.
 3. **Unstyled Margins and Canvas Padding:**
    The rendered page in `linux_007.png` sits rigidly in the viewport with uneven scan margins. There are no reading margin sliders, no background color inversion for PDF viewing, and no text selection handles.
@@ -158,7 +158,7 @@ The single most egregious architectural flaw of the Linux prototype is its relia
 - **Linux Prototype:** Implemented as a cramped `SettingsDialog(Adw.PreferencesWindow)` (`settings_dialog.py:26`). It reduces rich visual choices to standard text dropdowns (`Adw.ComboRow`) for themes ("White", "Silver", "Sepia", "Night", "Solarized") and font size sliders.
 
 #### D. The Bizarre `_revert_rail()` Navigation Bug
-In `src/aquile/app.py` lines 162–169 and 181–208:
+In `src/lumina/app.py` lines 162–169 and 181–208:
 ```python
         elif page == "catalogs":
             self._open_catalogs()
@@ -175,7 +175,7 @@ When a user clicks "Catalogs", "Statistics", or "Settings" on the left navigatio
 ## 6. Amateurish Prototype Friction Points Summary
 
 1. **Window Sizing & Responsiveness:** Hardcoded default size of 1280x800 with non-responsive inner boxes; shrinking or maximizing leads to unbalanced empty areas.
-2. **Missing Brand Identity:** Absence of the Aquile brand crest, custom typography, or polished vector iconography. Uses generic GNOME symbolic icons (`utilities-system-monitor-symbolic`, `emblem-documents-symbolic`).
+2. **Missing Brand Identity:** Absence of the Lumina brand crest, custom typography, or polished vector iconography. Uses generic GNOME symbolic icons (`utilities-system-monitor-symbolic`, `emblem-documents-symbolic`).
 3. **No Smooth View Transitions:** Zero animated page swaps between Home, Library, and Reader. Content snaps harshly into place.
 4. **Crude PDF Engine Integration:** Single-page Cairo rendering without texture caching or background pre-rendering, resulting in noticeable flicker during page turns.
 5. **No Visual Shelf or Cover Grid:** The library is incapable of displaying a visual grid of covers—the primary mode of modern digital book readers.
@@ -201,10 +201,10 @@ When a user clicks "Catalogs", "Statistics", or "Settings" on the left navigatio
 
 ## 8. Actionable Architectural Remediation Roadmap
 
-To elevate the Linux port from this amateurish prototype to an authentic, release-ready Aquile Reader implementation, the following architectural overhaul is required:
+To elevate the Linux port from this amateurish prototype to an authentic, release-ready Lumina Reader implementation, the following architectural overhaul is required:
 
 1. **Eliminate All Primary Modal Dialogs:**
-   Refactor `CatalogDialog`, `StatisticsDialog`, and `SettingsDialog` into first-class `Gtk.Box` / `Adw.Bin` views hosted directly inside `AquileShell.stack`. Remove `_revert_rail()` hack.
+   Refactor `CatalogDialog`, `StatisticsDialog`, and `SettingsDialog` into first-class `Gtk.Box` / `Adw.Bin` views hosted directly inside `LuminaShell.stack`. Remove `_revert_rail()` hack.
 2. **Implement the Fluid Mica / Acrylic Translucency Engine:**
    - Integrate Gaussian blur surface styling via CSS shaders or high-performance Cairo/Vulkan background compositing.
    - Support dynamic wallpaper sampling and transparency sliders matching Windows B0 Personalization.
@@ -219,7 +219,7 @@ To elevate the Linux port from this amateurish prototype to an authentic, releas
 5. **Modernize the Reader Engine:**
    - Replace single-page `Gtk.Picture` swapping with a virtualized, continuously scrollable canvas supporting both vertical continuous scroll and multi-column spreads.
    - Apply reader color themes (Night, Sepia, Solarized) directly to document rendering surfaces.
-   - Replace the generic PDF zoom toolbar with Aquile's minimal, elegant reading controls.
+   - Replace the generic PDF zoom toolbar with Lumina's minimal, elegant reading controls.
 
 ---
 *Report compiled and verified against video frame evidence.*

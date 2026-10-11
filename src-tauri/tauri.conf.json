@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "aquile-reader",
+  "productName": "lumina-reader",
   "version": "1.0.1",
-  "identifier": "com.aquilereader.desktop",
+  "identifier": "com.luminareader.desktop",
   "build": {
     "beforeDevCommand": "npm run dev --prefix frontend",
     "devUrl": "http://localhost:1420",
@@ -13,7 +13,7 @@
     "windows": [
       {
         "label": "main",
-        "title": "Aquile Reader",
+        "title": "Lumina Reader",
         "width": 1280,
         "height": 800,
         "minWidth": 800,
@@ -44,7 +44,7 @@
     ],
     "category": "Education",
     "shortDescription": "Modern, versatile eBook reader with native Fluent aesthetics",
-    "longDescription": "Aquile Reader is a modern, fast, and feature-rich eBook reader supporting EPUB, PDF, and Comic archives with native Windows Fluent design, Acrylic material, text-to-speech, and reading insights.",
+    "longDescription": "Lumina Reader is a modern, fast, and feature-rich eBook reader supporting EPUB, PDF, and Comic archives with native Windows Fluent design, Acrylic material, text-to-speech, and reading insights.",
     "linux": {
       "deb": {
         "depends": [

@@ -219,17 +219,17 @@ const MainShell: React.FC = () => {
   }, [currentView]);
 
   // Determine Titlebar text and back button status matching Windows B0
-  let titleBarText = 'Aquile Reader';
+  let titleBarText = 'Lumina Reader';
   let showBack = false;
   const cleanBookTitle = (currentBookTitle || '').replace(/[\uFFFD\0]/g, '').trim();
 
   if (isReading) {
-    titleBarText = `${cleanBookTitle || 'Book'} - Aquile Reader`;
+    titleBarText = `${cleanBookTitle || 'Book'} - Lumina Reader`;
     // In reading mode, ReaderView's FloatingToolbar provides the dedicated "Return to Library" back button.
     // Suppressing showBack on TitleBar prevents double back arrows from being stacked together.
     showBack = false;
   } else if (currentView !== 'home') {
-    titleBarText = 'Aquile Reader';
+    titleBarText = 'Lumina Reader';
     showBack = true;
   }
 

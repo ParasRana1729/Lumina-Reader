@@ -71,16 +71,22 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
   const [activeCategory, setActiveCategory] = useState<SettingsCategory>(initialCategory);
 
+  const getStoredSetting = (key: string): string | null => {
+    const luminaKey = key.startsWith('lumina_') ? key : key.replace('aquile_', 'lumina_');
+    const aquileKey = key.startsWith('aquile_') ? key : key.replace('lumina_', 'aquile_');
+    return localStorage.getItem(luminaKey) ?? localStorage.getItem(aquileKey);
+  };
+
   // --- Reader Settings State ---
   const [readAloudAutoScroll, setReadAloudAutoScroll] = useState(() => {
-    const val = localStorage.getItem('aquile_setting_readaloud_scroll');
+    const val = getStoredSetting('lumina_setting_readaloud_scroll');
     return val !== null ? val === 'true' : true;
   });
   const [searchEngine, setSearchEngine] = useState(() => {
-    return localStorage.getItem('aquile_setting_search_engine') || 'Bing';
+    return getStoredSetting('lumina_setting_search_engine') || 'Bing';
   });
   const [dictionary, setDictionary] = useState(() => {
-    return localStorage.getItem('aquile_setting_dictionary') || 'Default dictionary [en-US]';
+    return getStoredSetting('lumina_setting_dictionary') || 'Default dictionary [en-US]';
   });
   const [pageTransition, setPageTransitionState] = useState<PageTransitionStyle>(() => {
     return getPageTransition();
@@ -88,24 +94,24 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
   // Experimental Reader Toggles
   const [enhancedRendering, setEnhancedRendering] = useState(() => {
-    return localStorage.getItem('aquile_exp_enhanced_rendering') === 'true';
+    return getStoredSetting('lumina_exp_enhanced_rendering') === 'true';
   });
   const [useBookFonts, setUseBookFonts] = useState(() => {
-    return localStorage.getItem('aquile_exp_book_fonts') === 'true';
+    return getStoredSetting('lumina_exp_book_fonts') === 'true';
   });
   const [improvedTouchpad, setImprovedTouchpad] = useState(() => {
-    return localStorage.getItem('aquile_exp_touchpad') === 'true';
+    return getStoredSetting('lumina_exp_touchpad') === 'true';
   });
   const [modernEpubEngine, setModernEpubEngine] = useState(() => {
-    return localStorage.getItem('aquile_exp_modern_epub') === 'true';
+    return getStoredSetting('lumina_exp_modern_epub') === 'true';
   });
 
   // --- General Settings State ---
   const [showBookTitles, setShowBookTitles] = useState(() => {
-    return localStorage.getItem('aquile_setting_show_titles') === 'true';
+    return getStoredSetting('lumina_setting_show_titles') === 'true';
   });
   const [displayLanguage, setDisplayLanguage] = useState(() => {
-    return localStorage.getItem('aquile_setting_display_lang') || 'English';
+    return getStoredSetting('lumina_setting_display_lang') || 'English';
   });
   const [tutorialResetMessage, setTutorialResetMessage] = useState<string | null>(null);
 
@@ -115,7 +121,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   // UI must never report scanned book counts or sync times (f_031 shows an
   // empty state with just the two action buttons).
   const [syncFolders, setSyncFolders] = useState<SyncFolderItem[]>(() => {
-    const saved = localStorage.getItem('aquile_sync_folders');
+    const saved = getStoredSetting('lumina_sync_folders');
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
@@ -148,7 +154,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
     favorites: true,
   });
   const [backupStoragePath, setBackupStoragePath] = useState(
-    '/home/paras/Documents/AquileReader_Backups'
+    '/home/paras/Documents/LuminaReader_Backups'
   );
   const [backupLogs, setBackupLogs] = useState<string[]>([
     'Ready for operation.',
@@ -157,16 +163,16 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
   // --- Cloud Sync State ---
   const [isGoogleLinked, setIsGoogleLinked] = useState(() => {
-    return localStorage.getItem('aquile_cloud_linked') === 'true';
+    return getStoredSetting('lumina_cloud_linked') === 'true';
   });
   const [enableCloudSync, setEnableCloudSync] = useState(() => {
-    return localStorage.getItem('aquile_cloud_enabled') === 'true';
+    return getStoredSetting('lumina_cloud_enabled') === 'true';
   });
   const [useAltSignIn, setUseAltSignIn] = useState(() => {
-    return localStorage.getItem('aquile_cloud_alt_signin') === 'true';
+    return getStoredSetting('lumina_cloud_alt_signin') === 'true';
   });
   const [syncMode, setSyncMode] = useState<'all' | 'selected'>(() => {
-    return (localStorage.getItem('aquile_cloud_mode') as 'all' | 'selected') || 'all';
+    return (getStoredSetting('lumina_cloud_mode') as 'all' | 'selected') || 'all';
   });
   const [cloudSyncStatus, setCloudSyncStatus] = useState<string | null>(null);
 
@@ -175,7 +181,10 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
   // Save changes to localStorage
   const updateSetting = (key: string, val: boolean | string) => {
-    localStorage.setItem(key, String(val));
+    const luminaKey = key.startsWith('lumina_') ? key : key.replace('aquile_', 'lumina_');
+    const aquileKey = key.startsWith('aquile_') ? key : key.replace('lumina_', 'aquile_');
+    localStorage.setItem(luminaKey, String(val));
+    localStorage.setItem(aquileKey, String(val));
   };
 
   // Helper toggle switch matching Windows B0
@@ -249,7 +258,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
       }, 600);
       setTimeout(() => {
         setBackupLogs((prev) => [
-          `[${new Date().toLocaleTimeString()}] ✓ Backup created successfully: aquile_backup_${Date.now()}.zip (14.2 MB)`,
+          `[${new Date().toLocaleTimeString()}] ✓ Backup created successfully: lumina_backup_${Date.now()}.zip (14.2 MB)`,
           ...prev,
         ]);
         setIsBackupRunning(false);
@@ -296,6 +305,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
     };
     const updated = [...syncFolders, item];
     setSyncFolders(updated);
+    localStorage.setItem('lumina_sync_folders', JSON.stringify(updated));
     localStorage.setItem('aquile_sync_folders', JSON.stringify(updated));
     setNewFolderPath('');
     setIsAddFolderModalOpen(false);
@@ -304,6 +314,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   const handleRemoveSyncFolder = (id: string) => {
     const updated = syncFolders.filter((f) => f.id !== id);
     setSyncFolders(updated);
+    localStorage.setItem('lumina_sync_folders', JSON.stringify(updated));
     localStorage.setItem('aquile_sync_folders', JSON.stringify(updated));
   };
 
@@ -398,7 +409,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                 readAloudAutoScroll,
                 (val) => {
                   setReadAloudAutoScroll(val);
-                  updateSetting('aquile_setting_readaloud_scroll', val);
+                  updateSetting('lumina_setting_readaloud_scroll', val);
                 }
               )}
             </div>
@@ -415,7 +426,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                     value={searchEngine}
                     onChange={(e) => {
                       setSearchEngine(e.target.value);
-                      updateSetting('aquile_setting_search_engine', e.target.value);
+                      updateSetting('lumina_setting_search_engine', e.target.value);
                     }}
                     className="w-full appearance-none h-9 bg-neutral-800/80 border border-white/10 rounded-md pl-3 pr-8 text-[13px] text-white focus:outline-none focus:border-neutral-400 cursor-pointer"
                   >
@@ -437,7 +448,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                     value={dictionary}
                     onChange={(e) => {
                       setDictionary(e.target.value);
-                      updateSetting('aquile_setting_dictionary', e.target.value);
+                      updateSetting('lumina_setting_dictionary', e.target.value);
                     }}
                     className="w-full appearance-none h-9 bg-neutral-800/80 border border-white/10 rounded-md pl-3 pr-8 text-[13px] text-white focus:outline-none focus:border-neutral-400 cursor-pointer"
                   >
@@ -499,7 +510,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                   enhancedRendering,
                   (val) => {
                     setEnhancedRendering(val);
-                    updateSetting('aquile_exp_enhanced_rendering', val);
+                    updateSetting('lumina_exp_enhanced_rendering', val);
                   }
                 )}
 
@@ -509,7 +520,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                   useBookFonts,
                   (val) => {
                     setUseBookFonts(val);
-                    updateSetting('aquile_exp_book_fonts', val);
+                    updateSetting('lumina_exp_book_fonts', val);
                   }
                 )}
 
@@ -519,7 +530,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                   improvedTouchpad,
                   (val) => {
                     setImprovedTouchpad(val);
-                    updateSetting('aquile_exp_touchpad', val);
+                    updateSetting('lumina_exp_touchpad', val);
                   }
                 )}
 
@@ -529,7 +540,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                   modernEpubEngine,
                   (val) => {
                     setModernEpubEngine(val);
-                    updateSetting('aquile_exp_modern_epub', val);
+                    updateSetting('lumina_exp_modern_epub', val);
                   }
                 )}
               </div>
@@ -553,7 +564,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                 showBookTitles,
                 (val) => {
                   setShowBookTitles(val);
-                  updateSetting('aquile_setting_show_titles', val);
+                  updateSetting('lumina_setting_show_titles', val);
                 }
               )}
             </div>
@@ -568,6 +579,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                 <button
                   type="button"
                   onClick={() => {
+                    localStorage.removeItem('lumina_seen_tutorial');
                     localStorage.removeItem('aquile_seen_tutorial');
                     setTutorialResetMessage('Tutorials have been reset.');
                     setTimeout(() => setTutorialResetMessage(null), 3000);
@@ -596,7 +608,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                     value={displayLanguage}
                     onChange={(e) => {
                       setDisplayLanguage(e.target.value);
-                      updateSetting('aquile_setting_display_lang', e.target.value);
+                      updateSetting('lumina_setting_display_lang', e.target.value);
                     }}
                     className="w-full appearance-none h-9 bg-neutral-800/80 border border-white/10 rounded-md pl-3 pr-8 text-[13px] text-white focus:outline-none focus:border-neutral-400 cursor-pointer"
                   >
@@ -636,7 +648,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             </h1>
 
             <p className="text-[13px] text-neutral-300 leading-relaxed max-w-2xl">
-              Aquile Reader on app start-up syncs books from 'Sync Folders' and automatically add/remove books from the app library. This provides an easy way to keep the Aquile Reader library and your local book collection in sync.
+              Lumina Reader on app start-up syncs books from 'Sync Folders' and automatically add/remove books from the app library. This provides an easy way to keep the Lumina Reader library and your local book collection in sync.
             </p>
 
             <div className="flex items-center gap-3 pt-2">
@@ -1102,7 +1114,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                 onClick={() => {
                   const nextState = !isGoogleLinked;
                   setIsGoogleLinked(nextState);
-                  updateSetting('aquile_cloud_linked', nextState);
+                  updateSetting('lumina_cloud_linked', nextState);
                   if (nextState) {
                     setCloudSyncStatus('Linked as alex.reader@gmail.com');
                   } else {
@@ -1171,7 +1183,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                 enableCloudSync,
                 (val) => {
                   setEnableCloudSync(val);
-                  updateSetting('aquile_cloud_enabled', val);
+                  updateSetting('lumina_cloud_enabled', val);
                 }
               )}
 
@@ -1181,7 +1193,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                 useAltSignIn,
                 (val) => {
                   setUseAltSignIn(val);
-                  updateSetting('aquile_cloud_alt_signin', val);
+                  updateSetting('lumina_cloud_alt_signin', val);
                 }
               )}
             </div>
@@ -1198,7 +1210,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                     checked={syncMode === 'all'}
                     onChange={() => {
                       setSyncMode('all');
-                      updateSetting('aquile_cloud_mode', 'all');
+                      updateSetting('lumina_cloud_mode', 'all');
                     }}
                     className="accent-[#d41b6c]"
                     style={{ accentColor: currentTheme.accent }}
@@ -1214,7 +1226,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                     checked={syncMode === 'selected'}
                     onChange={() => {
                       setSyncMode('selected');
-                      updateSetting('aquile_cloud_mode', 'selected');
+                      updateSetting('lumina_cloud_mode', 'selected');
                     }}
                     className="accent-[#d41b6c]"
                     style={{ accentColor: currentTheme.accent }}
@@ -1264,8 +1276,8 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                 },
                 {
                   id: 1,
-                  q: 'What book formats does Aquile Reader support?',
-                  a: 'Aquile Reader supports EPUB (.epub), PDF (.pdf), Comic Book Archives (.cbz, .cbr), and MOBI files. Modern EPUB rendering is powered by our native Rust layout engine.',
+                  q: 'What book formats does Lumina Reader support?',
+                  a: 'Lumina Reader supports EPUB (.epub), PDF (.pdf), Comic Book Archives (.cbz, .cbr), and MOBI files. Modern EPUB rendering is powered by our native Rust layout engine.',
                 },
                 {
                   id: 2,
@@ -1427,12 +1439,12 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
         {/* ============================================================ */}
         {activeCategory === 'about' && (
           <div className="h-full flex flex-col items-center justify-center -mt-8 space-y-6">
-            {/* 3D Aquile Reader Icon matching win_051 */}
+            {/* 3D Lumina Reader Icon */}
             <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-[#3b9be8] to-[#1268b8] shadow-2xl flex items-center justify-center relative p-3 border border-white/20">
               <div className="w-full h-full flex flex-col items-center justify-center relative">
                 {/* White bookmark ribbon with 'A' */}
                 <div className="w-7 h-11 bg-white rounded-b-sm shadow-md flex items-start justify-center pt-1">
-                  <span className="text-[14px] font-bold text-[#1268b8] font-sans">A</span>
+                  <span className="text-[14px] font-bold text-[#1268b8] font-sans">L</span>
                 </div>
                 <div className="w-14 h-1 bg-white/40 rounded-full mt-2" />
                 <div className="w-10 h-1 bg-white/30 rounded-full mt-1" />
@@ -1441,9 +1453,10 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
             {/* Version & Copyright */}
             <div className="text-center space-y-1">
-              <div className="text-[14px] font-medium text-white">v 1.1.67</div>
+              <div className="text-[16px] font-semibold text-white">Lumina Reader</div>
+              <div className="text-[13px] text-neutral-300">v 1.2.0</div>
               <div className="text-[12px] text-neutral-400">
-                © Optimilia Studios. All Rights Reserved.
+                © Lumina Reader Contributors. All Rights Reserved.
               </div>
             </div>
 
@@ -1452,7 +1465,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
               {/* Group 1: Reddit, X, Substack */}
               <div className="flex items-center gap-4">
                 <a
-                  href="https://reddit.com/r/AquileReader"
+                  href="https://reddit.com"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-10 h-10 rounded-lg bg-[#ff4500] hover:scale-105 flex items-center justify-center transition-all shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70"

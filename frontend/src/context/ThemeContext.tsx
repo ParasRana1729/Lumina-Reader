@@ -16,18 +16,27 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  // aquile_* keys are the pre-rebrand storage names; they are kept as read
+  // fallbacks and written alongside the lumina_* keys so settings survive
+  // upgrading from an older build.
   const [themeId, setThemeIdState] = useState<ThemeId>(() => {
-    const saved = localStorage.getItem('aquile_theme_id');
+    const saved =
+      localStorage.getItem('lumina_theme_id') ||
+      localStorage.getItem('aquile_theme_id');
     return (saved && saved in COLOR_THEMES) ? (saved as ThemeId) : 'dark-side';
   });
 
   const [isTransparent, setIsTransparentState] = useState<boolean>(() => {
-    const saved = localStorage.getItem('aquile_transparent_bg');
+    const saved =
+      localStorage.getItem('lumina_transparent_bg') ??
+      localStorage.getItem('aquile_transparent_bg');
     return saved !== null ? saved === 'true' : true;
   });
 
   const [transparencyOpacity, setTransparencyOpacityState] = useState<number>(() => {
-    const saved = localStorage.getItem('aquile_bg_opacity');
+    const saved =
+      localStorage.getItem('lumina_bg_opacity') ||
+      localStorage.getItem('aquile_bg_opacity');
     return saved ? Number(saved) : 85;
   });
 
@@ -38,18 +47,21 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const setTheme = (id: ThemeId) => {
     if (COLOR_THEMES[id]) {
       setThemeIdState(id);
+      localStorage.setItem('lumina_theme_id', id);
       localStorage.setItem('aquile_theme_id', id);
     }
   };
 
   const setIsTransparent = (val: boolean) => {
     setIsTransparentState(val);
+    localStorage.setItem('lumina_transparent_bg', String(val));
     localStorage.setItem('aquile_transparent_bg', String(val));
   };
 
   const setTransparencyOpacity = (val: number) => {
     const clamped = Math.max(10, Math.min(100, val));
     setTransparencyOpacityState(clamped);
+    localStorage.setItem('lumina_bg_opacity', String(clamped));
     localStorage.setItem('aquile_bg_opacity', String(clamped));
   };
 

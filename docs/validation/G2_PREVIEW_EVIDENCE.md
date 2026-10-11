@@ -34,7 +34,7 @@ This evidence record validates the delivery of the internal local-reading slice:
 
 ### Suite A: Unit Test Suite
 - **Command:** `python3 -m unittest discover tests`
-- **Working Directory:** `/home/paras/Documents/Projects/Aquile-Reader`
+- **Working Directory:** `/home/paras/Documents/Projects/Lumina-Reader`
 - **Result:** 13/13 tests passed in 0.240s
 - **Coverage:**
   1. `test_domain_and_storage.py`: Book CRUD, ReadingProgress updates, Annotation persistence, Settings persistence, Collections cross-book queries.

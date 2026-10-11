@@ -417,7 +417,7 @@ export const EpubViewer: React.FC<EpubViewerProps> = ({
         color: currentTheme.text,
       }}
     >
-      {/* Edge page-turn zones matching native Windows Aquile Reader */}
+      {/* Edge page-turn zones matching the native Windows reference app */}
       <button
         type="button"
         aria-label="Previous Page"
@@ -441,7 +441,7 @@ export const EpubViewer: React.FC<EpubViewerProps> = ({
       </button>
 
       {/* Main Reading Canvas: every page is its own bordered sheet on the themed backdrop
-          (native Windows Aquile Reader, frame f_011). */}
+          (native Windows reference build, frame f_011). */}
       <div
         className={`mx-auto w-full px-4 py-6 flex flex-col gap-4 ${
           settings.isTwoColumn ? 'max-w-6xl' : 'max-w-3xl'
@@ -469,11 +469,11 @@ export const EpubViewer: React.FC<EpubViewerProps> = ({
             }}
           >
             <div className="flex-1">
-            {/* Running Document Header matching native Windows Aquile Reader */}
+            {/* Running Document Header matching the native Windows reference app */}
             <div className="flex items-center justify-between pb-6 select-none opacity-50 text-xs italic tracking-wider">
               <span>{metaTitle}</span>
               <span className="font-sans font-medium text-[11px] not-italic">
-                {metaAuthor || 'Aquile Reader'}
+                {metaAuthor || 'Lumina Reader'}
               </span>
             </div>
 

@@ -10,7 +10,7 @@
 
 ## 1. Context and Problem Statement
 
-Aquile Reader for Windows is a modern, customizable eBook reader offering two-column layouts, annotation tools (highlights, notes, bookmarks), fixed-layout support (PDF, CBZ/CBR), library management, and offline operation. Bringing Aquile Reader to Ubuntu requires achieving strict visual and behavioral parity without violating third-party intellectual property or relying on unsupported Windows-specific subsystems (UWP, Windows Store APIs, undocumented cloud databases).
+Lumina Reader for Windows is a modern, customizable eBook reader offering two-column layouts, annotation tools (highlights, notes, bookmarks), fixed-layout support (PDF, CBZ/CBR), library management, and offline operation. Bringing Lumina Reader to Ubuntu requires achieving strict visual and behavioral parity without violating third-party intellectual property or relying on unsupported Windows-specific subsystems (UWP, Windows Store APIs, undocumented cloud databases).
 
 The user explicitly approved the **clean-room native desktop implementation route** and instructed:
 *"Defer. Select the stack after G0 and the WP-04 parity spike. Do not scaffold an application yet."*
@@ -49,8 +49,8 @@ The automated parity spike suite (`spikes/parity_spike/run_spike.py`) demonstrat
 
 ## 4. Decision
 
-We approve **Python 3 + GTK4 / Libadwaita with SQLite WAL storage** as the primary stack for Aquile Reader for Ubuntu:
-- **UI Shell & Reader Presentation:** GTK4 + Libadwaita with custom CSS themes matching Aquile Reader tokens.
+We approve **Python 3 + GTK4 / Libadwaita with SQLite WAL storage** as the primary stack for Lumina Reader for Ubuntu:
+- **UI Shell & Reader Presentation:** GTK4 + Libadwaita with custom CSS themes matching Lumina Reader tokens.
 - **Engine Core:** Pure Python modular readers for EPUB, PDF, and CBZ/CBR.
 - **Persistence:** SQLite with Write-Ahead Logging (WAL) and synchronous=NORMAL.
 - **Platform Integration:** Standard XDG directories (`$XDG_DATA_HOME`, `$XDG_CONFIG_HOME`), AT-SPI accessibility, and Freedesktop desktop/MIME specifications.

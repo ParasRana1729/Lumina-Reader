@@ -43,7 +43,13 @@ pub fn run() {
         .setup(|app| {
             let app_dir = app.path().app_data_dir().unwrap_or_else(|_| {
                 let home = std::env::var("HOME").unwrap_or_else(|_| ".".to_string());
-                std::path::PathBuf::from(home).join(".local/share/aquile-reader")
+                let lumina_dir = std::path::PathBuf::from(&home).join(".local/share/lumina-reader");
+                let legacy_dir = std::path::PathBuf::from(&home).join(".local/share/aquile-reader");
+                if lumina_dir.exists() || !legacy_dir.exists() {
+                    lumina_dir
+                } else {
+                    legacy_dir
+                }
             });
             let db_path = app_dir.join("library.db");
             let conn = db::init_db(&db_path).expect("Failed to initialize SQLite database");

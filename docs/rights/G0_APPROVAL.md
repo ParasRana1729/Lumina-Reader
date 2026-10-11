@@ -11,7 +11,7 @@
 ## 1. Scope of Authorization
 
 Per product owner directive (2026-10-03), this project proceeds under an **authorized clean-room native desktop implementation route**:
-- **Goal:** Develop an independent native Linux desktop eBook reader for Ubuntu Desktop (24.04 LTS and 26.04 LTS, amd64, GNOME) delivering visual and behavioral parity with Aquile Reader's published user experience and reading workflow.
+- **Goal:** Develop an independent native Linux desktop eBook reader for Ubuntu Desktop (24.04 LTS and 26.04 LTS, amd64, GNOME) delivering visual and behavioral parity with Lumina Reader's published user experience and reading workflow.
 - **Delivery promise:** Complete support for local DRM-free eBook reading (EPUB, PDF, CBZ/CBR), two-column and one-column customized layouts, durable annotations (highlights, notes, bookmarks), library organization, reading statistics, and complete offline independence (`FR-01`–`FR-16`, `FR-20`, `UB-01`–`UB-10`, `VP-01`–`VP-05`, `NFR-01`–`NFR-07`).
 
 ## 2. Clean-Room Boundary and Intellectual Property Restrictions

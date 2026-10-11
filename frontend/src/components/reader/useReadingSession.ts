@@ -17,10 +17,11 @@ export function useReadingSession({
   onCheckpoint,
 }: UseReadingSessionProps) {
   // Load previous progress from localStorage if available
-  const storageKey = `aquile_reading_session_${bookId}`;
+  const storageKey = `lumina_reading_session_${bookId}`;
+  const legacyStorageKey = `aquile_reading_session_${bookId}`;
   const savedState = (() => {
     try {
-      const data = localStorage.getItem(storageKey);
+      const data = localStorage.getItem(storageKey) || localStorage.getItem(legacyStorageKey);
       if (data) return JSON.parse(data);
     } catch {
       // ignore
@@ -138,13 +139,14 @@ export function useReadingSession({
 
       try {
         localStorage.setItem(storageKey, JSON.stringify(newStats));
+        localStorage.setItem(legacyStorageKey, JSON.stringify(newStats));
       } catch {}
 
       if (onCheckpoint) {
         onCheckpoint(newStats);
       }
     },
-    [bookId, storageKey, totalWordsEstimate, wordsPerPage, markActive, onCheckpoint]
+    [bookId, storageKey, legacyStorageKey, totalWordsEstimate, wordsPerPage, markActive, onCheckpoint]
   );
 
   // Checkpoint timer: periodic checkpoint and unmount flush

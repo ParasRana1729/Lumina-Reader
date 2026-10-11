@@ -2,7 +2,7 @@
   "generated_utc": "2026-10-05T14:17:01.630659+00:00",
   "headless": true,
   "no_screenshots": true,
-  "style_css": "src/aquile/ui/style.css",
+  "style_css": "src/lumina/ui/style.css",
   "fixture": "fixtures/canonical-text.epub",
   "results": {
     "VP-01": {
@@ -122,7 +122,7 @@
       "pairs": [
         {
           "theme": "light",
-          "selector": ".aquile-theme-light",
+          "selector": ".lumina-theme-light",
           "bg": "#fbfbfb",
           "fg": "#242424",
           "contrast": 15.001,
@@ -133,7 +133,7 @@
         },
         {
           "theme": "light",
-          "selector": ".aquile-theme-light .reading-surface",
+          "selector": ".lumina-theme-light .reading-surface",
           "bg": "#ffffff",
           "fg": "#242424",
           "contrast": 15.523,
@@ -144,7 +144,7 @@
         },
         {
           "theme": "light",
-          "selector": ".aquile-theme-light .reading-column",
+          "selector": ".lumina-theme-light .reading-column",
           "bg": "#ffffff",
           "fg": "#242424",
           "contrast": 15.523,
@@ -155,7 +155,7 @@
         },
         {
           "theme": "dark",
-          "selector": ".aquile-theme-dark",
+          "selector": ".lumina-theme-dark",
           "bg": "#1a1a1a",
           "fg": "#e0e0e0",
           "contrast": 13.184,
@@ -166,7 +166,7 @@
         },
         {
           "theme": "dark",
-          "selector": ".aquile-theme-dark .reading-surface",
+          "selector": ".lumina-theme-dark .reading-surface",
           "bg": "#202020",
           "fg": "#dedede",
           "contrast": 12.111,
@@ -177,7 +177,7 @@
         },
         {
           "theme": "dark",
-          "selector": ".aquile-theme-dark .reading-column",
+          "selector": ".lumina-theme-dark .reading-column",
           "bg": "#202020",
           "fg": "#dedede",
           "contrast": 12.111,
@@ -188,7 +188,7 @@
         },
         {
           "theme": "sepia",
-          "selector": ".aquile-theme-sepia",
+          "selector": ".lumina-theme-sepia",
           "bg": "#ece3ce",
           "fg": "#433422",
           "contrast": 9.382,
@@ -199,7 +199,7 @@
         },
         {
           "theme": "sepia",
-          "selector": ".aquile-theme-sepia .reading-surface",
+          "selector": ".lumina-theme-sepia .reading-surface",
           "bg": "#f6efe2",
           "fg": "#433422",
           "contrast": 10.476,
@@ -210,7 +210,7 @@
         },
         {
           "theme": "sepia",
-          "selector": ".aquile-theme-sepia .reading-column",
+          "selector": ".lumina-theme-sepia .reading-column",
           "bg": "#f6efe2",
           "fg": "#433422",
           "contrast": 10.476,
@@ -222,9 +222,9 @@
       ],
       "min_contrast": 4.5,
       "theme_separation_delta_e": {
-        ".aquile-theme-light": 89.35,
-        ".aquile-theme-light .reading-surface": 87.75,
-        ".aquile-theme-light .reading-column": 87.75
+        ".lumina-theme-light": 89.35,
+        ".lumina-theme-light .reading-surface": 87.75,
+        ".lumina-theme-light .reading-column": 87.75
       },
       "b0_delta_e2000": "blocked: needs captured B0 swatches on target desktop (G1); documented-token Delta-E reported as headless proxy only"
     },

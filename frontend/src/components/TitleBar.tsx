@@ -10,7 +10,7 @@ interface TitleBarProps {
 }
 
 export const TitleBar: React.FC<TitleBarProps> = ({
-  title = 'Aquile Reader',
+  title = 'Lumina Reader',
   onBack,
   showBack = false,
 }) => {
@@ -19,7 +19,7 @@ export const TitleBar: React.FC<TitleBarProps> = ({
 
   const cleanTitle = (title || '')
     .replace(/[\uFFFD\0]/g, '')
-    .trim() || 'Aquile Reader';
+    .trim() || 'Lumina Reader';
 
   useEffect(() => {
     // Check initial state
@@ -108,17 +108,17 @@ export const TitleBar: React.FC<TitleBarProps> = ({
           {maximized ? (
             <Copy size={11} className="stroke-[2] rotate-180" />
           ) : (
-            <Square size={11} className="stroke-[2] stroke-neutral-200" />
+            <Square size={11} className="stroke-[2]" />
           )}
         </button>
 
         {/* Close */}
         <button
           onClick={handleClose}
-          className="w-[46px] h-full flex items-center justify-center transition-colors hover:bg-[#e81123] hover:text-white active:bg-[#c4101f]"
+          className="w-[46px] h-full flex items-center justify-center transition-colors hover:bg-[#e81123] hover:text-white active:bg-[#c40e1e] active:text-white"
           title="Close"
         >
-          <X size={13} className="stroke-[2.2]" />
+          <X size={13} className="stroke-[2]" />
         </button>
       </div>
     </header>

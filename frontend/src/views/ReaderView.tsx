@@ -84,8 +84,13 @@ export const ReaderView: React.FC<ReaderViewProps> = ({
   // Settings & Appearance state management with localStorage persistence (per-book and global fallback)
   const [settings, setSettings] = useState<ReaderSettings>(() => {
     try {
-      const bookSpecificKey = effectiveId ? `aquile_reader_settings_${effectiveId}` : null;
-      const saved = (bookSpecificKey && localStorage.getItem(bookSpecificKey)) || localStorage.getItem('aquile_reader_settings');
+      const luminaBookKey = effectiveId ? `lumina_reader_settings_${effectiveId}` : null;
+      const legacyBookKey = effectiveId ? `aquile_reader_settings_${effectiveId}` : null;
+      const saved =
+        (luminaBookKey && localStorage.getItem(luminaBookKey)) ||
+        (legacyBookKey && localStorage.getItem(legacyBookKey)) ||
+        localStorage.getItem('lumina_reader_settings') ||
+        localStorage.getItem('aquile_reader_settings');
       if (saved) {
         const parsed = JSON.parse(saved);
         // Normalize margin if string
@@ -289,8 +294,10 @@ export const ReaderView: React.FC<ReaderViewProps> = ({
 
       const next = { ...prev, ...synched };
       try {
+        localStorage.setItem('lumina_reader_settings', JSON.stringify(next));
         localStorage.setItem('aquile_reader_settings', JSON.stringify(next));
         if (effectiveId) {
+          localStorage.setItem(`lumina_reader_settings_${effectiveId}`, JSON.stringify(next));
           localStorage.setItem(`aquile_reader_settings_${effectiveId}`, JSON.stringify(next));
         }
       } catch {

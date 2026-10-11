@@ -1,5 +1,5 @@
 {
-  "schema": "aquile-bench/1",
+  "schema": "lumina-bench/1",
   "environment": {
     "python": "3.14.4",
     "implementation": "CPython",

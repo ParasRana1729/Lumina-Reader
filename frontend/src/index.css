@@ -26,7 +26,7 @@
   --font-serif-book: 'Merriweather', 'Gelasio', Georgia, 'Cambria', serif;
   --font-mono: 'Cascadia Mono', Consolas, 'JetBrains Mono', Menlo, monospace;
 
-  /* UI type scale (native Aquile Reader: 11 numbers / 13 body / 20 section titles) */
+  /* UI type scale (native Lumina Reader: 11 numbers / 13 body / 20 section titles) */
   --text-numeric: 11px;
   --text-body: 13px;
   --text-body-large: 14px;

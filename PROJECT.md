@@ -1,41 +1,41 @@
-# Project: Aquile Reader — WP-10 & WP-11 Incremental Feature Slice
+# Project: Lumina Reader — WP-10 & WP-11 Incremental Feature Slice
 
 ## Architecture
-Aquile Reader is a native Linux desktop e-book and document reader built with Python 3, GTK4, Libadwaita, and SQLite WAL storage.
+Lumina Reader is a native Linux desktop e-book and document reader built with Python 3, GTK4, Libadwaita, and SQLite WAL storage.
 The architecture follows clean separation of concerns:
-- **Domain Layer (`src/aquile/domain/`)**: Immutable dataclasses representing core entities (`Book`, `ReadingProgress`, `Annotation`, `ReadingSession`, `BookStatistics`, `LibraryStatistics`).
-- **Storage Layer (`src/aquile/storage/`)**: SQLite connection manager with WAL mode (`PRAGMA journal_mode = WAL; synchronous = NORMAL; foreign_keys = ON;`), schema version migrations, and repositories (`BookRepository`, `ProgressRepository`, `AnnotationRepository`, `SettingsRepository`, `StatisticsRepository`).
-- **Reader Engines (`src/aquile/reader/`)**:
+- **Domain Layer (`src/lumina/domain/`)**: Immutable dataclasses representing core entities (`Book`, `ReadingProgress`, `Annotation`, `ReadingSession`, `BookStatistics`, `LibraryStatistics`).
+- **Storage Layer (`src/lumina/storage/`)**: SQLite connection manager with WAL mode (`PRAGMA journal_mode = WAL; synchronous = NORMAL; foreign_keys = ON;`), schema version migrations, and repositories (`BookRepository`, `ProgressRepository`, `AnnotationRepository`, `SettingsRepository`, `StatisticsRepository`).
+- **Reader Engines (`src/lumina/reader/`)**:
   - `EpubParser` & `ChapterPaginator`: Reflowable text reader.
   - `ComicArchiveEngine`: Comic archive reader (`.cbz` via `zipfile`, `.cbr` via `libarchive.so.13`/ctypes), natural alphanumeric sorting, single-page and double-page spread pairing (isolated cover, LTR Western vs RTL Manga pair inversion).
   - `PdfDocumentEngine`: Fixed-layout PDF document reader using in-memory `libpoppler-glib.so.8` + `libcairo.so.2` via `ctypes` (with `/usr/bin/pdftoppm` CLI fallback), page count, dimension extraction, and zoom/fit calculations (fit-to-width, fit-to-page, custom scale).
   - `ReadingSessionTracker`: Activity tracking engine monitoring active vs idle time (120s idle threshold for text, 60s for comics), words read estimation, and words-per-minute (WPM) calculation.
-- **UI Layer (`src/aquile/ui/`)**:
-  - `AquileReaderApp` (`src/aquile/app.py`): Root application orchestrating `Adw.ApplicationWindow`, theme manager, and `Gtk.Stack` switching between `"library"` and active reader views.
-  - `LibraryView` (`src/aquile/ui/library_view.py`): Shelf grid of books, file import chooser (`.epub`, `.pdf`, `.cbz`, `.cbr`), statistics entry button.
-  - `ReaderView` (`src/aquile/ui/reader_view.py`): EPUB two-column reading canvas.
-  - `ComicReaderView` (`src/aquile/ui/comic_view.py`): Comic graphic canvas displaying single or double pages in `Gtk.Picture` with aspect ratio containment, spread controls, and LTR/RTL mode switching.
-  - `PdfReaderView` (`src/aquile/ui/pdf_view.py`): PDF canvas displaying vector-rendered pages in `Gtk.Picture`, zoom/fit controls, and direct page jumping.
-  - `StatisticsDialog` (`src/aquile/ui/statistics_dialog.py`): Libadwaita dialog with `Adw.ViewSwitcher` tabs ("Library Overview" and "Book Insights").
+- **UI Layer (`src/lumina/ui/`)**:
+  - `LuminaReaderApp` (`src/lumina/app.py`): Root application orchestrating `Adw.ApplicationWindow`, theme manager, and `Gtk.Stack` switching between `"library"` and active reader views.
+  - `LibraryView` (`src/lumina/ui/library_view.py`): Shelf grid of books, file import chooser (`.epub`, `.pdf`, `.cbz`, `.cbr`), statistics entry button.
+  - `ReaderView` (`src/lumina/ui/reader_view.py`): EPUB two-column reading canvas.
+  - `ComicReaderView` (`src/lumina/ui/comic_view.py`): Comic graphic canvas displaying single or double pages in `Gtk.Picture` with aspect ratio containment, spread controls, and LTR/RTL mode switching.
+  - `PdfReaderView` (`src/lumina/ui/pdf_view.py`): PDF canvas displaying vector-rendered pages in `Gtk.Picture`, zoom/fit controls, and direct page jumping.
+  - `StatisticsDialog` (`src/lumina/ui/statistics_dialog.py`): Libadwaita dialog with `Adw.ViewSwitcher` tabs ("Library Overview" and "Book Insights").
 - **Service Layer (G3 slice, headless-tested, UI wiring pending):**
-  - `TtsEngine` (`src/aquile/reader/tts_engine.py`) + `DictionaryService` (`src/aquile/reader/dictionary.py`): offline-first read-aloud/dictionary with explicit cloud consent (FR-12/FR-13).
-  - `OpdsClient`/`CatalogManager` (`src/aquile/catalog/`): open-protocol catalog discovery/download with traversal/size guards (FR-14).
-  - `ExchangeBundle`/`SyncState` (`src/aquile/sync/`): local zip export/import migration with newer-wins conflicts (FR-17/FR-19).
-  - `TierManager`/`AdPolicy` (`src/aquile/entitlements/`): local free/trial/premium gates + offline promo slots (FR-18).
+  - `TtsEngine` (`src/lumina/reader/tts_engine.py`) + `DictionaryService` (`src/lumina/reader/dictionary.py`): offline-first read-aloud/dictionary with explicit cloud consent (FR-12/FR-13).
+  - `OpdsClient`/`CatalogManager` (`src/lumina/catalog/`): open-protocol catalog discovery/download with traversal/size guards (FR-14).
+  - `ExchangeBundle`/`SyncState` (`src/lumina/sync/`): local zip export/import migration with newer-wins conflicts (FR-17/FR-19).
+  - `TierManager`/`AdPolicy` (`src/lumina/entitlements/`): local free/trial/premium gates + offline promo slots (FR-18).
   - Packaging groundwork: `debian/control`, `debian/rules`, `scripts/build_deb.sh` (UB-03–UB-06; signed APT is a manual next step).
 
 ## Code Layout
-- `src/aquile/domain/models.py`: Domain dataclasses (`ReadingSession`, `BookStatistics`, `LibraryStatistics`).
-- `src/aquile/storage/database.py`: Schema v2 migration (`reading_sessions`, `reading_statistics`).
-- `src/aquile/storage/repository.py`: `StatisticsRepository` implementing session recording and statistics queries.
-- `src/aquile/reader/comic_reader.py`: `ComicArchiveEngine` handling CBZ/CBR extraction, natural sort, and spread logic.
-- `src/aquile/reader/pdf_reader.py`: `PdfDocumentEngine` handling Poppler ctypes/CLI rendering, dimensions, zoom/fit math.
-- `src/aquile/reader/session_tracker.py`: `ReadingSessionTracker` tracking duration, idle filtering, words, and WPM.
-- `src/aquile/ui/comic_view.py`: `ComicReaderView` GTK4 widget.
-- `src/aquile/ui/pdf_view.py`: `PdfReaderView` GTK4 widget.
-- `src/aquile/ui/statistics_dialog.py`: `StatisticsDialog` Libadwaita dialog.
-- `src/aquile/ui/library_view.py`: Multi-format import and stats button integration.
-- `src/aquile/app.py`: Polymorphic reader routing in `open_book()`.
+- `src/lumina/domain/models.py`: Domain dataclasses (`ReadingSession`, `BookStatistics`, `LibraryStatistics`).
+- `src/lumina/storage/database.py`: Schema v2 migration (`reading_sessions`, `reading_statistics`).
+- `src/lumina/storage/repository.py`: `StatisticsRepository` implementing session recording and statistics queries.
+- `src/lumina/reader/comic_reader.py`: `ComicArchiveEngine` handling CBZ/CBR extraction, natural sort, and spread logic.
+- `src/lumina/reader/pdf_reader.py`: `PdfDocumentEngine` handling Poppler ctypes/CLI rendering, dimensions, zoom/fit math.
+- `src/lumina/reader/session_tracker.py`: `ReadingSessionTracker` tracking duration, idle filtering, words, and WPM.
+- `src/lumina/ui/comic_view.py`: `ComicReaderView` GTK4 widget.
+- `src/lumina/ui/pdf_view.py`: `PdfReaderView` GTK4 widget.
+- `src/lumina/ui/statistics_dialog.py`: `StatisticsDialog` Libadwaita dialog.
+- `src/lumina/ui/library_view.py`: Multi-format import and stats button integration.
+- `src/lumina/app.py`: Polymorphic reader routing in `open_book()`.
 - `scripts/generate_fixtures.py`: Fixture generator with valid PNG CRC repair for `fixtures/sample-comic.cbz`.
 - `tests/`: Automated unit, integration, and E2E test suites.
 
@@ -63,7 +63,7 @@ The architecture follows clean separation of concerns:
 | 19 | Statistics Dialog UI | `StatisticsDialog` with Library Overview and Book Insights tabs | M4 | R3, R4 |
 | 20 | Theme Sync for Statistics | Ensure Statistics view respects Light, Dark, Sepia themes | M4 | R4 |
 | 21 | Multi-Format Library Support | Import, display, and open `.pdf`, `.cbz`, `.cbr` in `LibraryView` | M5 | R4 |
-| 22 | Polymorphic Reader Dispatch | `AquileReaderApp.open_book()` routes to appropriate reader view by format | M5 | R4 |
+| 22 | Polymorphic Reader Dispatch | `LuminaReaderApp.open_book()` routes to appropriate reader view by format | M5 | R4 |
 | 23 | E2E Test Suite | Comprehensive opaque-box test suite across Tiers 1-4 | M-TEST | Acceptance Criteria |
 | 24 | Baseline Non-Regression | Ensure all 13 existing tests continue to pass with 0 regressions | M-FINAL | Acceptance Criteria |
 
@@ -82,7 +82,7 @@ The architecture follows clean separation of concerns:
 
 ## Interface Contracts
 
-### Domain Models (`src/aquile/domain/models.py`)
+### Domain Models (`src/lumina/domain/models.py`)
 ```python
 @dataclass(frozen=True)
 class ReadingSession:
@@ -118,7 +118,7 @@ class LibraryStatistics:
     format_counts: dict[str, int]
 ```
 
-### Storage Interface (`src/aquile/storage/repository.py:StatisticsRepository`)
+### Storage Interface (`src/lumina/storage/repository.py:StatisticsRepository`)
 ```python
 class StatisticsRepository:
     def __init__(self, db: Database): ...
@@ -128,7 +128,7 @@ class StatisticsRepository:
     def get_sessions_for_book(self, book_id: str, limit: int = 50) -> list[ReadingSession]: ...
 ```
 
-### Comic Engine Interface (`src/aquile/reader/comic_reader.py`)
+### Comic Engine Interface (`src/lumina/reader/comic_reader.py`)
 ```python
 class ComicArchiveEngine:
     def __init__(self, file_path: str): ...
@@ -139,7 +139,7 @@ class ComicArchiveEngine:
     def get_page_texture(self, page_index: int) -> Gdk.Texture: ...
 ```
 
-### PDF Engine Interface (`src/aquile/reader/pdf_reader.py`)
+### PDF Engine Interface (`src/lumina/reader/pdf_reader.py`)
 ```python
 class PdfDocumentEngine:
     def __init__(self, file_path: str): ...
@@ -149,7 +149,7 @@ class PdfDocumentEngine:
     def calculate_fit_scale(self, page_index: int, viewport_width: float, viewport_height: float, mode: str) -> float: ... # mode: "width" | "page"
 ```
 
-### Session Tracker Interface (`src/aquile/reader/session_tracker.py`)
+### Session Tracker Interface (`src/lumina/reader/session_tracker.py`)
 ```python
 class ReadingSessionTracker:
     def __init__(self, book_id: str, format: str, idle_threshold_seconds: Optional[float] = None): ...

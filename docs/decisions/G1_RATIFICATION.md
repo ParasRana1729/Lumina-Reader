@@ -12,7 +12,7 @@
 ## 1. Ratification Scope
 
 Following the clearance of Gate G0 ([docs/rights/G0_APPROVAL.md](../rights/G0_APPROVAL.md)) and the successful execution of the WP-04 Parity Spike suite ([docs/validation/WP04_PARITY_SPIKE_REPORT.json](../validation/WP04_PARITY_SPIKE_REPORT.json)), Gate G1 is formally ratified:
-1. **Reference Target Specification:** Frozen based on Aquile Reader's published desktop UX, navigation structure, and two-column reading workflow specified in `PRD.md` §§4–5.
+1. **Reference Target Specification:** Frozen based on Lumina Reader's published desktop UX, navigation structure, and two-column reading workflow specified in `PRD.md` §§4–5.
 2. **Approved Implementation Stack:** Python 3 + GTK4 / Libadwaita with SQLite WAL storage, providing native GNOME integration, AT-SPI2 accessibility, zero external build dependencies, and robust persistence durability.
 3. **Platform Scope:** Ubuntu 24.04 LTS and 26.04 LTS (amd64), default GNOME session on Wayland and supported X11 sessions, adhering to `UB-01`–`UB-10`.
 4. **Offline Independence:** Local DRM-free library management and reading (EPUB, PDF, CBZ/CBR) operate with 100% offline autonomy without required accounts or external cloud dependencies (`FR-20`).

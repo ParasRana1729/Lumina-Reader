@@ -1,12 +1,12 @@
-# Aquile Reader
+# Lumina Reader
 
 <div align="center">
 
-<img src="src-tauri/icons/128x128.png" alt="Aquile Reader Logo" width="100" height="100" />
+<img src="src-tauri/icons/128x128.png" alt="Lumina Reader Logo" width="100" height="100" />
 
 ### Modern, Versatile eBook & Comic Reader with Native Fluent Design
 
-[![Release](https://img.shields.io/github/v/release/ParasRana1729/Aquile-Reader?style=flat-square&color=8ecdf7)](https://github.com/ParasRana1729/Aquile-Reader/releases)
+[![Release](https://img.shields.io/github/v/release/ParasRana1729/Lumina-Reader?style=flat-square&color=8ecdf7)](https://github.com/ParasRana1729/Lumina-Reader/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
 [![Tauri 2.0](https://img.shields.io/badge/Tauri-2.0-blue?style=flat-square&logo=tauri)](https://tauri.app/)
 [![Rust](https://img.shields.io/badge/Rust-1.80%2B-orange?style=flat-square&logo=rust)](https://www.rust-lang.org/)
@@ -20,7 +20,7 @@
 
 ## Overview
 
-**Aquile Reader** is a high-performance desktop reading application built from the ground up in **Rust** and **Tauri 2.0** with **React 19**, **TypeScript**, and **Tailwind CSS**. Designed to faithfully replicate the fluid aesthetics of modern Windows Fluent Design, it brings native Acrylic materials, dynamic theme-accent titlebars, continuous reading engines, voice narration, and reading analytics to the modern desktop.
+**Lumina Reader** is a high-performance desktop reading application built from the ground up in **Rust** and **Tauri 2.0** with **React 19**, **TypeScript**, and **Tailwind CSS**. Designed to faithfully replicate the fluid aesthetics of modern Windows Fluent Design, it brings native Acrylic materials, dynamic theme-accent titlebars, continuous reading engines, voice narration, and reading analytics to the modern desktop.
 
 ---
 
@@ -99,13 +99,13 @@ graph TD
 
 ## Installation & Downloads
 
-Pre-built Linux packages are available on the [**Releases**](https://github.com/ParasRana1729/Aquile-Reader/releases) page.
+Pre-built Linux packages are available on the [**Releases**](https://github.com/ParasRana1729/Lumina-Reader/releases) page.
 
 ### Debian / Ubuntu (`.deb`)
 
 ```bash
 # Download latest .deb from Releases
-sudo dpkg -i aquile-reader_*.deb
+sudo dpkg -i lumina-reader_*.deb
 # If there are missing dependencies:
 sudo apt-get install -f
 ```
@@ -113,8 +113,8 @@ sudo apt-get install -f
 ### Portable AppImage (`.AppImage`)
 
 ```bash
-chmod +x aquile-reader_*.AppImage
-./aquile-reader_*.AppImage
+chmod +x lumina-reader_*.AppImage
+./lumina-reader_*.AppImage
 ```
 
 ---
@@ -143,8 +143,8 @@ chmod +x aquile-reader_*.AppImage
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/ParasRana1729/Aquile-Reader.git
-   cd Aquile-Reader
+   git clone https://github.com/ParasRana1729/Lumina-Reader.git
+   cd Lumina-Reader
    ```
 
 2. **Install frontend dependencies**:

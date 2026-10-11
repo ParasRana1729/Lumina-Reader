@@ -23,65 +23,7 @@ pub fn init_db(db_path: &Path) -> Result<Connection> {
          PRAGMA synchronous = NORMAL;
          PRAGMA foreign_keys = ON;
 
-         CREATE TABLE IF NOT EXISTS books (
-             id TEXT PRIMARY KEY,
-             title TEXT NOT NULL,
-             author TEXT,
-             file_path TEXT NOT NULL UNIQUE,
-             format TEXT NOT NULL,
-             cover_image TEXT,
-             page_count INTEGER NOT NULL DEFAULT 0,
-             chapter_count INTEGER NOT NULL DEFAULT 0,
-             file_size INTEGER NOT NULL DEFAULT 0,
-             is_favorite INTEGER NOT NULL DEFAULT 0,
-             added_date TEXT NOT NULL,
-             last_read_date TEXT
-         );
-
-         CREATE TABLE IF NOT EXISTS reading_progress (
-             book_id TEXT PRIMARY KEY,
-             percentage REAL NOT NULL DEFAULT 0.0,
-             position TEXT,
-             updated_at TEXT NOT NULL,
-             FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE CASCADE
-         );
-
-         CREATE TABLE IF NOT EXISTS annotations (
-             id TEXT PRIMARY KEY,
-             book_id TEXT NOT NULL,
-             cfi_range TEXT,
-             selected_text TEXT NOT NULL,
-             note TEXT,
-             color TEXT NOT NULL DEFAULT '#ffeb3b',
-             created_at TEXT NOT NULL,
-             updated_at TEXT NOT NULL,
-             FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE CASCADE
-         );
-
-         CREATE TABLE IF NOT EXISTS bookmarks (
-             id TEXT PRIMARY KEY,
-             book_id TEXT NOT NULL,
-             page INTEGER NOT NULL,
-             title TEXT NOT NULL,
-             excerpt TEXT,
-             created_at TEXT NOT NULL,
-             FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE CASCADE
-         );
-
-         CREATE TABLE IF NOT EXISTS reading_sessions (
-             id TEXT PRIMARY KEY,
-             book_id TEXT NOT NULL,
-             start_time TEXT NOT NULL,
-             end_time TEXT,
-             duration_seconds INTEGER NOT NULL DEFAULT 0,
-             words_read INTEGER NOT NULL DEFAULT 0,
-             FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE CASCADE
-         );
-
-         CREATE TABLE IF NOT EXISTS settings (
-             key TEXT PRIMARY KEY,
-             value TEXT NOT NULL
-         );",
+         CREATE TABLE IF NOT EXISTS books (\n             id TEXT PRIMARY KEY,\n             title TEXT NOT NULL,\n             author TEXT,\n             file_path TEXT NOT NULL UNIQUE,\n             format TEXT NOT NULL,\n             cover_image TEXT,\n             page_count INTEGER NOT NULL DEFAULT 0,\n             chapter_count INTEGER NOT NULL DEFAULT 0,\n             file_size INTEGER NOT NULL DEFAULT 0,\n             is_favorite INTEGER NOT NULL DEFAULT 0,\n             added_date TEXT NOT NULL,\n             last_read_date TEXT\n         );\n\n         CREATE TABLE IF NOT EXISTS reading_progress (\n             book_id TEXT PRIMARY KEY,\n             percentage REAL NOT NULL DEFAULT 0.0,\n             position TEXT,\n             updated_at TEXT NOT NULL,\n             FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE CASCADE\n         );\n\n         CREATE TABLE IF NOT EXISTS annotations (\n             id TEXT PRIMARY KEY,\n             book_id TEXT NOT NULL,\n             cfi_range TEXT,\n             selected_text TEXT NOT NULL,\n             note TEXT,\n             color TEXT NOT NULL DEFAULT '#ffeb3b',\n             created_at TEXT NOT NULL,\n             updated_at TEXT NOT NULL,\n             FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE CASCADE\n         );\n\n         CREATE TABLE IF NOT EXISTS bookmarks (\n             id TEXT PRIMARY KEY,\n             book_id TEXT NOT NULL,\n             page INTEGER NOT NULL,\n             title TEXT NOT NULL,\n             excerpt TEXT,\n             created_at TEXT NOT NULL,\n             FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE CASCADE\n         );\n\n         CREATE TABLE IF NOT EXISTS reading_sessions (\n             id TEXT PRIMARY KEY,\n             book_id TEXT NOT NULL,\n             start_time TEXT NOT NULL,\n             end_time TEXT,\n             duration_seconds INTEGER NOT NULL DEFAULT 0,\n             words_read INTEGER NOT NULL DEFAULT 0,\n             FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE CASCADE\n         );\n\n         CREATE TABLE IF NOT EXISTS settings (\n             key TEXT PRIMARY KEY,\n             value TEXT NOT NULL\n         );",
     )?;
 
     // Seed default sample books if table is empty
@@ -285,7 +227,7 @@ fn seed_default_books(conn: &Connection) -> Result<()> {
         ],
     )?;
 
-    // 4. Quick Start Guide Aquile Reader (From win_019)
+    // 4. Quick Start Guide Lumina Reader
     let guide_id = "book-quick-start".to_string();
     conn.execute(
         "INSERT INTO books (id, title, author, file_path, format, cover_image, page_count, chapter_count, file_size, is_favorite, added_date, last_read_date)
@@ -293,7 +235,7 @@ fn seed_default_books(conn: &Connection) -> Result<()> {
         params![
             guide_id,
             "Quick Start Guide",
-            "Aquile Reader",
+            "Lumina Reader",
             "builtin://quick-start-guide.epub",
             "epub",
             generate_quick_start_cover_svg(),
@@ -878,7 +820,7 @@ fn generate_quick_start_cover_svg() -> String {
   </defs>
   <rect width="300" height="440" rx="8" fill="#ffffff" stroke="#e5e7eb" stroke-width="1.5"/>
 
-  <!-- Prismatic wings (Aquile origami logo) -->
+  <!-- Prismatic wings (Lumina origami logo) -->
   <g transform="translate(150, 230)">
     <polygon points="0,-120 -80,40 -20,80" fill="url(#wing1)" opacity="0.85"/>
     <polygon points="0,-120 80,40 20,80" fill="url(#wing2)" opacity="0.85"/>
@@ -890,13 +832,13 @@ fn generate_quick_start_cover_svg() -> String {
     Quick Start Guide
   </text>
   <text x="150" y="98" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="600" fill="#6366f1" text-anchor="middle">
-    Aquile Reader
+    Lumina Reader
   </text>
 
   <g transform="translate(24, 385)">
     <rect width="28" height="28" rx="4" fill="#2563eb"/>
     <text x="14" y="20" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="16" font-weight="bold" fill="#ffffff" text-anchor="middle">
-      A
+      L
     </text>
   </g>
 </svg>"##;
@@ -910,7 +852,7 @@ mod tests {
 
     #[test]
     fn test_init_and_seed_db() {
-        let temp_dir = std::env::temp_dir().join(format!("aquile_test_{}", std::process::id()));
+        let temp_dir = std::env::temp_dir().join(format!("lumina_test_{}", std::process::id()));
         let db_file = temp_dir.join("test_library.db");
         fs::create_dir_all(&temp_dir).unwrap();
 
@@ -948,7 +890,7 @@ mod tests {
 
 pub fn generate_generic_cover_svg(title: &str, author: &str) -> String {
     format!(
-        r##"data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 420" width="280" height="420">
+        r##"<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 420" width="280" height="420">
   <defs>
     <linearGradient id="genBg" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0%" stop-color="#1e293b"/>
@@ -960,7 +902,7 @@ pub fn generate_generic_cover_svg(title: &str, author: &str) -> String {
   <rect x="24" y="24" width="232" height="372" fill="none" stroke="#e2e8f0" stroke-width="1.5" opacity="0.3"/>
   <text x="140" y="160" text-anchor="middle" font-family="system-ui, sans-serif" font-weight="700" font-size="20" fill="#ffffff">{}</text>
   <text x="140" y="240" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" fill="#94a3b8">{}</text>
-  <text x="140" y="360" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" letter-spacing="2" fill="#64748b">AQUILE READER</text>
+  <text x="140" y="360" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" letter-spacing="2" fill="#64748b">LUMINA READER</text>
 </svg>"##,
         title, author
     )

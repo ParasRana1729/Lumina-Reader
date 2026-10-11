@@ -1,12 +1,12 @@
 [package]
-name = "aquile-reader"
+name = "lumina-reader"
 version = "1.0.1"
-description = "Aquile Reader for Linux"
-authors = ["Aquile Reader Team"]
+description = "Lumina Reader for Linux"
+authors = ["Lumina Reader Team"]
 edition = "2021"
 
 [lib]
-name = "aquile_reader_lib"
+name = "lumina_reader_lib"
 crate-type = ["staticlib", "cdylib", "rlib"]
 
 [build-dependencies]
@@ -25,4 +25,3 @@ chrono = { version = "0.4", features = ["serde"] }
 zip = { version = "2", default-features = false, features = ["deflate"] }
 base64 = "0.22"
 quick-xml = "0.37"
-

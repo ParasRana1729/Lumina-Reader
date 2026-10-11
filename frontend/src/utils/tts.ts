@@ -1,5 +1,5 @@
 /**
- * Aquile Reader - Text-to-Speech (TTS) Engine & Web Speech API Wrapper
+ * Lumina Reader - Text-to-Speech (TTS) Engine & Web Speech API Wrapper
  *
  * Provides sentence segmentation, boundary word/sentence tracking,
  * playback controls (play/pause/resume/stop), sentence navigation,

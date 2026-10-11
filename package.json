@@ -1,7 +1,7 @@
 {
-  "name": "aquile-reader",
+  "name": "lumina-reader",
   "version": "1.0.0",
-  "description": "",
+  "description": "Lumina Reader - Modern, fast eBook and document reader with native Fluent aesthetics",
   "main": "index.js",
   "directories": {
     "doc": "docs"
@@ -17,15 +17,25 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ParasRana1729/Aquile-Reader.git"
+    "url": "git+https://github.com/ParasRana1729/Lumina-Reader.git"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "ebook",
+    "epub",
+    "pdf",
+    "comic",
+    "cbz",
+    "cbr",
+    "reader",
+    "tauri",
+    "fluent-ui"
+  ],
+  "author": "Lumina Reader Team",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ParasRana1729/Aquile-Reader/issues"
+    "url": "https://github.com/ParasRana1729/Lumina-Reader/issues"
   },
-  "homepage": "https://github.com/ParasRana1729/Aquile-Reader#readme",
+  "homepage": "https://github.com/ParasRana1729/Lumina-Reader#readme",
   "devDependencies": {
     "@tauri-apps/cli": "^2.12.1"
   }

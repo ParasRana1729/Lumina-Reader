@@ -1,8 +1,8 @@
-# Aquile Reader — E2E Test Infrastructure & Methodology (WP-10 & WP-11)
+# Lumina Reader — E2E Test Infrastructure & Methodology (WP-10 & WP-11)
 
 ## 1. Executive Summary & Architecture
 
-This document defines the comprehensive end-to-end (E2E) testing infrastructure, architecture, and verification methodology for **Work Package 10 (WP-10: PDF and Comic Book Graphic Readers)** and **Work Package 11 (WP-11: Reading Statistics and Session Insights)** in Aquile Reader for Ubuntu Linux.
+This document defines the comprehensive end-to-end (E2E) testing infrastructure, architecture, and verification methodology for **Work Package 10 (WP-10: PDF and Comic Book Graphic Readers)** and **Work Package 11 (WP-11: Reading Statistics and Session Insights)** in Lumina Reader for Ubuntu Linux.
 
 The testing infrastructure guarantees:
 1. **Opaque-Box Verification**: Tests validate public interface contracts and observable behavior (return values, database states, UI properties, file system artifacts) rather than private implementation details.

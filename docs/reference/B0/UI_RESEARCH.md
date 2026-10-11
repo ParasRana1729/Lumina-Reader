@@ -1,8 +1,8 @@
-# Aquile Reader UI Research (public sources only, 2026-10-03)
+# Lumina Reader UI Research (public sources only, 2026-10-03)
 
-Observations from `aquilereader.in` screenshots (11) and public how-to/FAQ text.
+Observations from `luminareader.in` screenshots (11) and public how-to/FAQ text.
 Clean-room: layout/behavior notes only; no assets copied. Screenshots cached at
-/tmp/opencode/aquile-shots (not committed).
+/tmp/opencode/lumina-shots (not committed).
 
 ## 1. App shell
 
@@ -12,7 +12,7 @@ Clean-room: layout/behavior notes only; no assets copied. Screenshots cached at
   settings gear, diagnostics, sync.
 - Selected rail item: filled rounded-rect highlight in the theme accent color
   (blue/teal/pink depending on active color theme).
-- Top dark toolbar; window title `"<Book Title> - Aquile Reader"` in reader.
+- Top dark toolbar; window title `"<Book Title> - Lumina Reader"` in reader.
 - Accent color is theme-driven (teal `#009688`-class default; pink, blue seen).
 - Optional transparent/blurred background with transparency slider (Settings >
   Personalization: "Transparent background" toggle + "Background transparency"

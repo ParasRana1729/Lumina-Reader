@@ -106,7 +106,7 @@ export const ComicViewer: React.FC<ComicViewerProps> = ({
                 <rect width="800" height="1200" fill="${pageNum === 1 ? '#1a1024' : '#1e1e24'}" stroke="#333" stroke-width="2"/>
                 <circle cx="400" cy="400" r="180" fill="${pageNum === 1 ? '#d41b6c' : '#334155'}" opacity="0.3"/>
                 <text x="400" y="380" fill="#eaeaea" font-size="42" font-family="sans-serif" font-weight="bold" text-anchor="middle">
-                  ${pageNum === 1 ? 'AQUILE COMIC: COVER' : `PANEL SPREAD #${pageNum}`}
+                  ${pageNum === 1 ? 'LUMINA COMIC: COVER' : `PANEL SPREAD #${pageNum}`}
                 </text>
                 <text x="400" y="440" fill="#94a3b8" font-size="24" font-family="sans-serif" text-anchor="middle">
                   ${pageNum === 1 ? 'Volume I - Issue #1' : `Scene Act ${pageNum} - Illustrated Sequence`}

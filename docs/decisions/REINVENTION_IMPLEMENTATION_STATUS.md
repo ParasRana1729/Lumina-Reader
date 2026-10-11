@@ -1,7 +1,7 @@
-# Aquile Reader Reinvention: Implementation Status & Parity Report
+# Lumina Reader Reinvention: Implementation Status & Parity Report
 
 **Architecture:** Tauri 2.0 + Rust Core + React 19 + TypeScript + Vite + Tailwind CSS  
-**Reference Baseline:** Windows Aquile Reader `v1.1.67` ([`windows-aquile-reader.mp4`](file:///home/paras/Videos/Screencasts/windows-aquile-reader.mp4))  
+**Reference Baseline:** Windows Lumina Reader `v1.1.67` ([`windows-lumina-reader.mp4`](file:///home/paras/Videos/Screencasts/windows-lumina-reader.mp4))  
 **Target Desktop:** Ubuntu 24.04 & 26.04 LTS (amd64, GNOME Wayland & X11)  
 **Date:** 2026-10-05  
 
@@ -9,7 +9,7 @@
 
 ## 1. Executive Summary
 
-In response to the drastic experiential gap between the legacy Linux prototype and the commercial-grade Windows B0 application, Aquile Reader has been completely reinvented from scratch under **Option A (Tauri 2.0 + Rust + Modern Fluent UI)**.
+In response to the drastic experiential gap between the legacy Linux prototype and the commercial-grade Windows B0 application, Lumina Reader has been completely reinvented from scratch under **Option A (Tauri 2.0 + Rust + Modern Fluent UI)**.
 
 Using multiple parallel specialized subagents, the entire product stack has been built, wired, and verified with zero compilation errors.
 
@@ -42,71 +42,71 @@ graph TD
 ## 2. Completed Phase Deliverables
 
 ### Phase 1: Core Shell & Fluent Window Architecture
-* **Unified Client-Side Titlebar ([`frontend/src/components/TitleBar.tsx`](file:///home/paras/Documents/Projects/Aquile-Reader/frontend/src/components/TitleBar.tsx))**:
+* **Unified Client-Side Titlebar ([`frontend/src/components/TitleBar.tsx`](file:///home/paras/Documents/Projects/Lumina-Reader/frontend/src/components/TitleBar.tsx))**:
   * Seamlessly integrated 32px titlebar with dynamic theme-accent background (`#680036` Dark Side, `#8ecdf7` Clear Sky, etc.).
-  * Context-aware title display: `"Aquile Reader"` or `← Book Title - Aquile Reader` with interactive back navigation.
+  * Context-aware title display: `"Lumina Reader"` or `← Book Title - Lumina Reader` with interactive back navigation.
   * Windows Fluent caption buttons (Minimize, Maximize/Restore, Close) with hover feedback.
   * Native window dragging via `data-tauri-drag-region`.
-* **Fluent Acrylic Material Engine ([`frontend/src/components/AcrylicCanvas.tsx`](file:///home/paras/Documents/Projects/Aquile-Reader/frontend/src/components/AcrylicCanvas.tsx))**:
+* **Fluent Acrylic Material Engine ([`frontend/src/components/AcrylicCanvas.tsx`](file:///home/paras/Documents/Projects/Lumina-Reader/frontend/src/components/AcrylicCanvas.tsx))**:
   * Translucent frosted glass canvas with `backdrop-filter: blur(32px) saturate(180%)`.
   * Wallpaper simulation layer replicating the misty forest bokeh seen in the Windows B0 screencast.
   * Live transparency toggle and opacity slider (20% to 100%).
-* **Left Navigation Rail ([`frontend/src/components/NavigationRail.tsx`](file:///home/paras/Documents/Projects/Aquile-Reader/frontend/src/components/NavigationRail.tsx))**:
+* **Left Navigation Rail ([`frontend/src/components/NavigationRail.tsx`](file:///home/paras/Documents/Projects/Lumina-Reader/frontend/src/components/NavigationRail.tsx))**:
   * 52px slim rail with Fluent icons (Home, Library, Annotations, Catalogs, Settings, Reading Insights).
   * Active item indicator pill in theme accent color with high-contrast icon.
-* **8 Windows Color Themes ([`frontend/src/types/theme.ts`](file:///home/paras/Documents/Projects/Aquile-Reader/frontend/src/types/theme.ts))**:
+* **8 Windows Color Themes ([`frontend/src/types/theme.ts`](file:///home/paras/Documents/Projects/Lumina-Reader/frontend/src/types/theme.ts))**:
   * *Vine Yard* (`#514f11`), *Dark Side* (`#680036`), *Fresh Berry* (`#c2c0df`), *Pulpy Orange* (`#e26a2c`), *Clear sky* (`#8ecdf7`), *Flash* (`#8c1818`), *Turquoise* (`#065e4f`), *Green Apple* (`#5d7c15`).
   * Live CSS variable propagation (`--accent-color`, `--titlebar-bg`, `--acrylic-opacity`) across all UI elements.
 
 ---
 
 ### Phase 2: Local SQLite WAL Storage & Library Dashboard
-* **Rust SQLite Storage Engine ([`src-tauri/src/db.rs`](file:///home/paras/Documents/Projects/Aquile-Reader/src-tauri/src/db.rs))**:
+* **Rust SQLite Storage Engine ([`src-tauri/src/db.rs`](file:///home/paras/Documents/Projects/Lumina-Reader/src-tauri/src/db.rs))**:
   * Initialized in Write-Ahead Logging mode (`PRAGMA journal_mode = WAL; PRAGMA synchronous = NORMAL;`).
   * Managed via thread-safe `DbState(Mutex<Connection>)`.
   * Pre-seeded with authentic books matching `win_001.png` (*The Prince*, *Man's Search For Meaning*, *Sherlock Holmes*).
-* **Metadata & Cover Extractors ([`src-tauri/src/extractors/`](file:///home/paras/Documents/Projects/Aquile-Reader/src-tauri/src/extractors/))**:
+* **Metadata & Cover Extractors ([`src-tauri/src/extractors/`](file:///home/paras/Documents/Projects/Lumina-Reader/src-tauri/src/extractors/))**:
   * `epub.rs`: Parses `container.xml` and OPF manifest to extract titles, authors, and cover image data URLs.
   * `cbz.rs`: Natural alphanumeric sorting of image files and first-page cover extraction.
   * `pdf.rs`: PDF metadata and cover generator.
-* **Home Dashboard ([`frontend/src/views/HomeView.tsx`](file:///home/paras/Documents/Projects/Aquile-Reader/frontend/src/views/HomeView.tsx))**:
+* **Home Dashboard ([`frontend/src/views/HomeView.tsx`](file:///home/paras/Documents/Projects/Lumina-Reader/frontend/src/views/HomeView.tsx))**:
   * Two-column layout matching `win_001.png`.
   * Left: "Recent Reads" with inline "Open Library ›" button. Hero book card with luminous glow halo (`0 0 28px rgba(255, 255, 255, 0.28)`), plus adjacent stacked covers.
   * Right: "Favourite Books" with glowing theme-accent star empty state (*"Your favourite books would appear here"*), plus inline "See more ›".
   * Bottom Right: "Recently Added Books" carousel.
-* **Library Cover Shelf ([`frontend/src/views/LibraryView.tsx`](file:///home/paras/Documents/Projects/Aquile-Reader/frontend/src/views/LibraryView.tsx))**:
+* **Library Cover Shelf ([`frontend/src/views/LibraryView.tsx`](file:///home/paras/Documents/Projects/Lumina-Reader/frontend/src/views/LibraryView.tsx))**:
   * Cover shelf grid matching `win_018.png` with format filter dropdown (`All Books ⌵`), sort order, search bar, view switcher, and `[+ Add Book]` file picker.
   * Collapsible book details inspector pane on right with book metadata, progress %, and delete action.
 
 ---
 
 ### Phase 3: High-Fidelity Reading Engine
-* **Reading Sanctum Viewport ([`frontend/src/components/reader/ReadingSanctum.tsx`](file:///home/paras/Documents/Projects/Aquile-Reader/frontend/src/components/reader/ReadingSanctum.tsx))**:
+* **Reading Sanctum Viewport ([`frontend/src/components/reader/ReadingSanctum.tsx`](file:///home/paras/Documents/Projects/Lumina-Reader/frontend/src/components/reader/ReadingSanctum.tsx))**:
   * Deep charcoal background (`#262626`) with off-white serif typography (`#EAEAEA`).
   * Theme palette picker: Night, Sepia, White, Gray.
-* **Continuous Vertical Scroll & Page Badging ([`frontend/src/components/reader/PageBoundaryBadge.tsx`](file:///home/paras/Documents/Projects/Aquile-Reader/frontend/src/components/reader/PageBoundaryBadge.tsx))**:
+* **Continuous Vertical Scroll & Page Badging ([`frontend/src/components/reader/PageBoundaryBadge.tsx`](file:///home/paras/Documents/Projects/Lumina-Reader/frontend/src/components/reader/PageBoundaryBadge.tsx))**:
   * Fluid vertical scrolling across pages matching `win_005`–`win_012`.
   * Centered italic page indicator badges (*"23 of 239"*, *"26 of 239"*) flanked by subtle horizontal hairline rules.
-* **Floating Overlay Toolbar ([`frontend/src/components/reader/FloatingToolbar.tsx`](file:///home/paras/Documents/Projects/Aquile-Reader/frontend/src/components/reader/FloatingToolbar.tsx))**:
+* **Floating Overlay Toolbar ([`frontend/src/components/reader/FloatingToolbar.tsx`](file:///home/paras/Documents/Projects/Lumina-Reader/frontend/src/components/reader/FloatingToolbar.tsx))**:
   * Auto-hiding semi-transparent top toolbar matching `win_004`.
   * Table of Contents drawer, Bookmarks drawer, Annotations drawer, in-book Search overlay, ReadAloud TTS via Web Speech API, Zoom controls, 1/2 Column spread switch, Font/Appearance popover (`Aa`), and Fullscreen toggle.
 * **Reader Engines**:
   * PDF: `PdfViewer.tsx` powered by `pdfjs-dist` with continuous multi-page vertical scroll and selectable text layer (`.textLayer`).
   * EPUB: `EpubViewer.tsx` powered by `epubjs` with multi-column spreads and chapter navigation.
   * Comic: `ComicViewer.tsx` powered by `jszip` with cover isolation and single/double spreads.
-* **Session Tracking ([`frontend/src/components/reader/useReadingSession.ts`](file:///home/paras/Documents/Projects/Aquile-Reader/frontend/src/components/reader/useReadingSession.ts))**:
+* **Session Tracking ([`frontend/src/components/reader/useReadingSession.ts`](file:///home/paras/Documents/Projects/Lumina-Reader/frontend/src/components/reader/useReadingSession.ts))**:
   * 5-second checkpointing of reading progress, idle pause filtering (>25s), and continuous WPM calculation.
 
 ---
 
 ### Phase 4: Integrated Feature Hubs (Zero Modal Popups)
-* **Reading Insights Hub ([`frontend/src/views/InsightsView.tsx`](file:///home/paras/Documents/Projects/Aquile-Reader/frontend/src/views/InsightsView.tsx))**:
+* **Reading Insights Hub ([`frontend/src/views/InsightsView.tsx`](file:///home/paras/Documents/Projects/Lumina-Reader/frontend/src/views/InsightsView.tsx))**:
   * Metric cards: Books read, Days read, Reading time (hrs), Avg. reading time per day (mins), Reading speed (WPM).
   * Streak counters: Current streak (days & weeks in a row), Record streak (daily & weekly records).
   * **Interactive Monthly Trends Bar Chart (`win_045`)**: Responsive SVG bar chart with metric selector (`Days read ⌵`, `Reading time ⌵`, `Pages read ⌵`), active theme-accent colored bars, count badges, and interactive tooltips.
-* **Comprehensive Full-Page Settings Suite ([`frontend/src/views/SettingsView.tsx`](file:///home/paras/Documents/Projects/Aquile-Reader/frontend/src/views/SettingsView.tsx))**:
+* **Comprehensive Full-Page Settings Suite ([`frontend/src/views/SettingsView.tsx`](file:///home/paras/Documents/Projects/Lumina-Reader/frontend/src/views/SettingsView.tsx))**:
   * In-shell navigation covering: *Reader Settings*, *General*, *Sync Folders*, *Personalization* (8 themes & transparency slider), *Backup & Restore* (with live log console), *Cloud Sync* (Google Drive), *FAQ*, *Changelog* (up to v1.1.67), and *About Us*.
-* **OPDS Catalog Browser ([`frontend/src/views/CatalogsView.tsx`](file:///home/paras/Documents/Projects/Aquile-Reader/frontend/src/views/CatalogsView.tsx))**:
+* **OPDS Catalog Browser ([`frontend/src/views/CatalogsView.tsx`](file:///home/paras/Documents/Projects/Lumina-Reader/frontend/src/views/CatalogsView.tsx))**:
   * Pre-configured feeds: Project Gutenberg, Standard Ebooks, Feedbooks.
   * Catalog explorer with search, genre filters, and one-click download to library.
 
